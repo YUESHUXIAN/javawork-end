@@ -15,13 +15,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>4.0.1</version>
-      <scope>provided</scope>
+        <groupId>jakarta.servlet</groupId>
+        <artifactId>jakarta.servlet-api</artifactId>
+        <version>5.0.0</version>
+        <scope>provided</scope>
     </dependency>
 
-    <!-- 2. MySQL JDBC驱动 -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -29,14 +28,12 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- 3. FastJSON JSON序列化（前后端axios交互返回json） -->
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>1.2.83</version>
     </dependency>
 
-    <!-- 4. POI 导出Excel（进出记录导出功能） -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
@@ -48,14 +45,12 @@
       <version>4.1.2</version>
     </dependency>
 
-    <!-- 5. 工具：日期、字符串工具类 -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.12.0</version>
     </dependency>
 
-    <!-- 6. 日志（可选，打印JDBC、Servlet日志） -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>

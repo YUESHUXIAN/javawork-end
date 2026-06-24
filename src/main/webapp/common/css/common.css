@@ -1,0 +1,61 @@
+/* common.css - 项目通用样式 */
+
+/* 1. 全局基础设置 */
+body {
+    background-image: url('/images/3.png');
+
+        /* 2. 让背景图完全覆盖整个屏幕，不留白边 */
+        background-size: cover;
+
+        /* 3. 图片居中显示 */
+        background-position: center center;
+
+        /* 4. 防止图片跟随页面滚动条滚动（固定在屏幕上） */
+        background-attachment: fixed;
+
+        /* 5. 设置原有字体不变 */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+/* 2. 主容器样式（卡片效果） */
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px; /* 圆角 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* 轻微的阴影，产生立体感 */
+    margin-top: 30px;
+    margin-bottom: 30px;
+    max-width: 1200px;
+}
+
+/* 3. 页面标题样式 (加左侧蓝色边框) */
+h3.page-title, h3 {
+    border-left: 4px solid #007bff; /* 蓝色竖条 */
+    padding-left: 12px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 4. 表格表头美化 */
+.table thead th {
+    background-color: #e9ecef;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* 5. 统一按钮间距 */
+.btn {
+    margin-right: 5px;
+    border-radius: 4px;
+}
+
+/* 6. 输入框聚焦时的样式优化 */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* 7. 表格操作列按钮间距 */
+.action-btn {
+    margin-right: 5px;
+    font-size: 0.85rem;
+}

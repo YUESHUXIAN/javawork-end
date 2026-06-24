@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>小区业主管理</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { background: #fff; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>业主信息管理</h3>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#ownerModal" onclick="openAddModal()">+ 初始化业主</button>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+        <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>身份证</th>
+            <th>所属楼宇ID</th>
+            <th>房间号</th>
+            <th>手机号</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <!-- 数据由 JS 渲染 -->
+        </tbody>
+    </table>
+</div>
+
+<!-- 新增/修改 模态框 -->
+<div class="modal fade" id="ownerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">初始化业主</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>业主姓名：</label>
+                    <input type="text" id="name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>身份证号：</label>
+                    <input type="text" id="idCard" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>所属楼宇ID：</label>
+                    <input type="number" id="buildId" class="form-control" placeholder="请输入数字 ID">
+                </div>
+                <div class="form-group">
+                    <label>房间号：</label>
+                    <input type="text" id="roomNo" class="form-control" placeholder="如: 1-101">
+                </div>
+                <div class="form-group">
+                    <label>手机号：</label>
+                    <input type="text" id="phone" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitOwner()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const API_URL = '/admin/owner'; // 根据你的项目实际路径调整
+
+    $(document).ready(function() {
+        loadOwners();
+    });
+
+    // 1. 加载业主列表
+    function loadOwners() {
+        axios.get(API_URL, { params: { action: 'list' } }).then(res => {
+            let list = res.data;
+            let html = '';
+            list.forEach(item => {
+                // 状态：0未确认，1已确认
+                let statusText = item.isConfirm == 1 ? '<span class="badge badge-success">已确认</span>' : '<span class="badge badge-warning">待确认</span>';
+                html += `<tr>
+                            <td>${item.id}</td>
+                            <td>${item.name}</td>
+                            <td>${item.idCard}</td>
+                            <td>${item.buildId}</td>
+                            <td>${item.roomNo || '-'}</td>
+                            <td>${item.phone || '-'}</td>
+                            <td>${statusText}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" onclick="openEditModal(${item.id}, '${item.name}', '${item.idCard}', ${item.buildId}, '${item.roomNo}', '${item.phone}')">修改</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteOwner(${item.id})">删除</button>
+                            </td>
+                         </tr>`;
+            });
+            $('#tableBody').html(html);
+        });
+    }
+
+    // 2. 打开新增弹窗
+    function openAddModal() {
+        $('#modalTitle').text('初始化业主');
+        $('#editId').val('');
+        $('#name').val('');
+        $('#idCard').val('');
+        $('#buildId').val('');
+        $('#roomNo').val('');
+        $('#phone').val('');
+    }
+
+    // 3. 打开修改弹窗
+    function openEditModal(id, name, idCard, buildId, roomNo, phone) {
+        $('#modalTitle').text('修改业主信息');
+        $('#editId').val(id);
+        $('#name').val(name);
+        $('#idCard').val(idCard);
+        $('#buildId').val(buildId);
+        $('#roomNo').val(roomNo);
+        $('#phone').val(phone);
+        $('#ownerModal').modal('show');
+    }
+
+    // 4. 提交新增/修改
+    function submitOwner() {
+        let id = $('#editId').val();
+        let params = new URLSearchParams();
+        // 如果 id 有值，则是更新，否则是新增初始化(addInit)
+        params.append('action', id ? 'update' : 'addInit');
+        params.append('id', id);
+        params.append('name', $('#name').val());
+        params.append('idCard', $('#idCard').val());
+        params.append('buildId', $('#buildId').val());
+        params.append('roomNo', $('#roomNo').val());
+        params.append('phone', $('#phone').val());
+
+        axios.post(API_URL, params).then(res => {
+            let data = res.data;
+            if(data.code === 200) {
+                alert(data.msg);
+                $('#ownerModal').modal('hide');
+                loadOwners();
+            } else {
+                alert(data.msg);
+            }
+        });
+    }
+
+    // 5. 删除业主
+    function deleteOwner(id) {
+        if(!confirm('删除该业主将同时删除其所有记录，确定吗？')) return;
+        let params = new URLSearchParams();
+        params.append('action', 'delete');
+        params.append('id', id);
+
+        axios.post(API_URL, params).then(res => {
+            let data = res.data;
+            if(data.code === 200) {
+                alert(data.msg);
+                loadOwners();
+            } else {
+                alert(data.msg);
+            }
+        });
+    }
+</script>
+</body>
+</html>

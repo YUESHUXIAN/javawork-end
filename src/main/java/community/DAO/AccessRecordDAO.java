@@ -13,17 +13,12 @@ public class AccessRecordDAO {
 
     /**
      * 多条件查询进出记录：姓名模糊、开始时间、结束时间
-     * @param name 模糊姓名
-     * @param start 进入起始时间
-     * @param end 进入结束时间
-     * @return 记录集合
      */
     public List<AccessRecord> query(String name, String start, String end) {
         List<AccessRecord> recordList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM access_record WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
-        // 拼接动态查询条件
         if (name != null && !name.trim().isEmpty()) {
             sql.append(" AND name LIKE ? ");
             params.add("%" + name.trim() + "%");
@@ -41,12 +36,10 @@ public class AccessRecordDAO {
         conn = DBUtil.getConn();
         try {
             pstmt = conn.prepareStatement(sql.toString());
-            // 填充占位符
             for (int i = 0; i < params.size(); i++) {
                 pstmt.setObject(i + 1, params.get(i));
             }
             rs = pstmt.executeQuery();
-            // 封装实体
             while (rs.next()) {
                 AccessRecord record = new AccessRecord();
                 record.setId(rs.getInt("id"));
@@ -66,5 +59,24 @@ public class AccessRecordDAO {
             DBUtil.close(conn, pstmt, rs);
         }
         return recordList;
+    }
+
+    public void addRecord(AccessRecord record) {
+        String sql = "INSERT INTO access_record (name, is_owner, id_card, phone, enter_time, temp_pwd, owner_id) VALUES (?, ?, ?, ?, NOW(), ?, ?)";
+        DBUtil.update(sql, record.getName(), record.getIsOwner(), record.getIdCard(), record.getPhone(), record.getTempPwd(), record.getOwnerId());
+    }
+
+    // 2. 离开时更新离开时间（业主/访客通用）
+    public void updateLeaveTimeByName(String name) {
+        String sql = "UPDATE access_record SET leave_time = NOW() WHERE name = ? AND leave_time IS NULL ORDER BY enter_time DESC LIMIT 1";
+        DBUtil.update(sql, name);
+    }
+
+    // 3. 访客离开时校验临时密码
+    public boolean checkVisitorTempPwd(String name, String tempPwd) {
+        String sql = "SELECT COUNT(*) FROM access_record WHERE name=? AND temp_pwd=? AND leave_time IS NULL";
+        Object val = DBUtil.queryValue(sql, name, tempPwd);
+        if (val == null) return false;
+        return ((Number)val).longValue() > 0;
     }
 }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>身份核验与修改申请</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../common/css/common.css">
+    <style>
+        .step-title { font-weight: 600; color: #007bff; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>📝 业主信息修改申请</h3>
+    <hr>
+
+    <div class="row">
+        <!-- 左侧：身份核验区 -->
+        <div class="col-md-6 border-right">
+            <h5 class="step-title">第一步：身份核验</h5>
+            <p class="text-muted small">请输入您在小区物业登记的原始信息进行核验。</p>
+            <div class="form-group">
+                <label>业主姓名：</label>
+                <input type="text" id="name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>身份证号：</label>
+                <input type="text" id="idCard" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>所属楼栋ID：</label>
+                <input type="number" id="buildId" class="form-control" placeholder="例如 1">
+            </div>
+            <button id="verifyBtn" class="btn btn-primary w-100">核验身份</button>
+            <p id="verifyMsg" class="mt-2 text-center"></p>
+        </div>
+
+        <!-- 右侧：申请修改区 (初始隐藏) -->
+        <div class="col-md-6" id="applyArea" style="display: none;">
+            <h5 class="step-title">第二步：提交修改申请</h5>
+            <p class="text-muted small">身份验证通过！请填写需要修改的新信息。</p>
+            <div class="form-group">
+                <label>新手机号：</label>
+                <input type="text" id="newPhone" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>新门牌号：</label>
+                <input type="text" id="newRoom" class="form-control" placeholder="如 1-101">
+            </div>
+            <div class="form-group">
+                <label>新门禁密码：</label>
+                <input type="password" id="newPwd" class="form-control" placeholder="请设置新密码">
+            </div>
+            <button id="submitApplyBtn" class="btn btn-success w-100">提交修改申请</button>
+            <p id="applyMsg" class="mt-2 text-center"></p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="index.html" class="btn btn-secondary btn-sm">返回首页</a>
+    </div>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 1. 核验身份
+    $("#verifyBtn").click(function() {
+        let params = {
+            name: $("#name").val(),
+            idCard: $("#idCard").val(),
+            buildId: $("#buildId").val()
+        };
+        if(!params.name || !params.idCard || !params.buildId) {
+            $("#verifyMsg").text("请填写完整信息！").css("color", "red");
+            return;
+        }
+
+        // 假设后端核验接口为：/owner/verify
+        axios.post('/owner/verify', params).then(res => {
+            let data = res.data;
+            if(data.code === 200) {
+                $("#verifyMsg").text("✅ 身份核验成功！请填写修改申请。").css("color", "green");
+                $("#applyArea").slideDown(); // 显示右侧修改区
+                // 将核验成功的业主ID存起来，或者前端通过 Session 拿，这里假设后端 Session 处理了
+                // 下面提交申请时直接调用接口，后端从 Session 拿 ID
+            } else {
+                $("#verifyMsg").text("❌ " + data.msg).css("color", "red");
+                $("#applyArea").slideUp();
+            }
+        }).catch(() => {
+             $("#verifyMsg").text("❌ 网络错误").css("color", "red");
+        });
+    });
+
+    // 2. 提交修改申请
+    $("#submitApplyBtn").click(function() {
+        let params = {
+            newPhone: $("#newPhone").val(),
+            newRoom: $("#newRoom").val(),
+            newPwd: $("#newPwd").val()
+        };
+
+        // 假设后端提交申请接口为：/owner/submitApply
+        axios.post('/owner/submitApply', params).then(res => {
+            let data = res.data;
+            if(data.code === 200) {
+                $("#applyMsg").text("✅ " + data.msg).css("color", "green");
+                // 提交成功可清空表单
+                $("#newPhone, #newRoom, #newPwd").val('');
+            } else {
+                $("#applyMsg").text("❌ " + data.msg).css("color", "red");
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -44,4 +44,32 @@ public class DBUtil {
     public static void close(Connection conn, PreparedStatement pstmt) {
         close(conn, pstmt, null);
     }
+
+    // 通用更新方法（insert/update/delete）
+    public static int update(String sql, Object... params) {
+        try (Connection conn = getConn(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) pstmt.setObject(i + 1, params[i]);
+            }
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    // 查询单个值（第一行第一列）
+    public static Object queryValue(String sql, Object... params) {
+        try (Connection conn = getConn(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) pstmt.setObject(i + 1, params[i]);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getObject(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
