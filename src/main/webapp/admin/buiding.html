@@ -75,7 +75,14 @@
 
     function loadBuildings() {
         axios.get(API_URL, { params: { action: 'list' } }).then(res => {
-            let list = res.data;
+            let data = res.data;
+            // 检查是否返回401未登录
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
+            let list = data;
             let html = '';
             list.forEach(item => {
                 html += `<tr>
@@ -124,13 +131,20 @@
 
         axios.post(API_URL, params).then(res => {
             let data = res.data; // 假设后端返回 JSON {code: 200, msg: '...'}
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
             if(data.code === 200) {
                 alert(data.msg);
                 $('#buildingModal').modal('hide');
                 loadBuildings(); // 刷新列表
             } else {
-                alert(data.msg); // 显示“楼宇编号已存在”
+                alert(data.msg); // 显示”楼宇编号已存在”
             }
+        }).catch(() => {
+            alert(“网络错误，请稍后重试”);
         });
     }
 
@@ -143,12 +157,19 @@
 
         axios.post(API_URL, params).then(res => {
             let data = res.data;
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
             if(data.code === 200) {
                 alert(data.msg);
                 loadBuildings();
             } else {
                 alert(data.msg);
             }
+        }).catch(() => {
+            alert("网络错误，请稍后重试");
         });
     }
 </script>

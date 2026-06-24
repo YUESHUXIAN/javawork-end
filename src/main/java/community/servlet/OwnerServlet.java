@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,6 +22,14 @@ public class OwnerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json;charset=utf-8");
+
+        // 登录拦截
+        HttpSession session = req.getSession();
+        if (session.getAttribute("loginAdmin") == null) {
+            resp.getWriter().write("{\"code\":401,\"msg\":\"请先登录管理员\"}");
+            return;
+        }
+
         String action = req.getParameter("action");
         if ("list".equals(action)) {
             List<Owner> owners = ownerDAO.getAllOwners();
@@ -35,6 +44,14 @@ public class OwnerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setContentType("application/json;charset=utf-8");
+
+        // 登录拦截
+        HttpSession session = req.getSession();
+        if (session.getAttribute("loginAdmin") == null) {
+            resp.getWriter().write("{\"code\":401,\"msg\":\"请先登录管理员\"}");
+            return;
+        }
+
         String action = req.getParameter("action");
 
         if ("addInit".equals(action)) {

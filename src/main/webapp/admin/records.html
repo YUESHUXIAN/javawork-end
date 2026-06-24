@@ -50,13 +50,22 @@
 <script>
     // 查询按钮
     $("#searchBtn").click(function(){
-        let param = {
-            name: $("#searchName").val(),
-            startTime: $("#startTime").val(),
-            endTime: $("#endTime").val()
-        }
-        axios.post("/admin/queryRecord", param).then(res=>{
-            let list = res.data.data;
+        let params = new URLSearchParams();
+        params.append('name', $("#searchName").val());
+        params.append('startTime', $("#startTime").val());
+        params.append('endTime', $("#endTime").val());
+
+        axios.post("/admin/queryRecord", params, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res=>{
+            let data = res.data;
+            // 检查是否返回401未登录
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
+            let list = data.data;
             let html = "";
             list.forEach(item=>{
                 html += `<tr>
@@ -70,6 +79,8 @@
                     </tr>`
             })
             $("#tableBody").html(html);
+        }).catch(() => {
+            alert("网络错误，请稍后重试");
         })
     })
 

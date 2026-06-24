@@ -64,13 +64,23 @@
             newRoom: $("#newRoom").val(),
             newPwd: $("#newPwd").val()
         }
-        axios.post("/owner/apply", params).then(res=>{
+        // 使用 URLSearchParams 转换为表单格式
+        const searchParams = new URLSearchParams();
+        Object.keys(params).forEach(key => {
+            searchParams.append(key, params[key]);
+        });
+
+        axios.post("/owner/submitApply", searchParams, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res=>{
             let data = res.data;
             if(data.code === 200){
                 $("#msg").text(data.msg).css("color", "green");
             }else{
                 $("#msg").text(data.msg).css("color", "red");
             }
+        }).catch(() => {
+            $("#msg").text("网络错误，请稍后重试").css("color", "red");
         })
     })
 </script>

@@ -88,7 +88,14 @@
     // 1. 加载业主列表
     function loadOwners() {
         axios.get(API_URL, { params: { action: 'list' } }).then(res => {
-            let list = res.data;
+            let data = res.data;
+            // 检查是否返回401未登录
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
+            let list = data;
             let html = '';
             list.forEach(item => {
                 // 状态：0未确认，1已确认
@@ -108,6 +115,8 @@
                          </tr>`;
             });
             $('#tableBody').html(html);
+        }).catch(() => {
+            alert("网络错误，请稍后重试");
         });
     }
 
@@ -149,6 +158,11 @@
 
         axios.post(API_URL, params).then(res => {
             let data = res.data;
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
             if(data.code === 200) {
                 alert(data.msg);
                 $('#ownerModal').modal('hide');
@@ -156,6 +170,8 @@
             } else {
                 alert(data.msg);
             }
+        }).catch(() => {
+            alert("网络错误，请稍后重试");
         });
     }
 
@@ -168,12 +184,19 @@
 
         axios.post(API_URL, params).then(res => {
             let data = res.data;
+            if(data.code === 401) {
+                alert(data.msg);
+                window.location.href = 'index.html';
+                return;
+            }
             if(data.code === 200) {
                 alert(data.msg);
                 loadOwners();
             } else {
                 alert(data.msg);
             }
+        }).catch(() => {
+            alert("网络错误，请稍后重试");
         });
     }
 </script>

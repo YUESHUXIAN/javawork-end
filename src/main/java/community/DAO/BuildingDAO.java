@@ -38,6 +38,28 @@ public class BuildingDAO {
         return ((Number)o).longValue() > 0;
     }
 
+    // 检查名称是否已存在（修改时需排除当前楼宇的ID）
+    public boolean isBuildNameExists(String buildName, Integer excludeId) {
+        String sql = "SELECT count(*) FROM building WHERE build_name=? AND id != ?";
+        Connection conn = DBUtil.getConn();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, buildName);
+            ps.setObject(2, excludeId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(conn, ps, rs);
+        }
+        return false;
+    }
+
     // 查询所有楼宇（供下拉框使用）
     public List<Building> getAllBuildings() {
         List<Building> list = new ArrayList<>();

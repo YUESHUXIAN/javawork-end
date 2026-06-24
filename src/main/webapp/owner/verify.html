@@ -77,8 +77,15 @@
             return;
         }
 
-        // 假设后端核验接口为：/owner/verify
-        axios.post('/owner/verify', params).then(res => {
+        // 使用 URLSearchParams 转换为表单格式
+        const searchParams = new URLSearchParams();
+        searchParams.append('name', params.name);
+        searchParams.append('idCard', params.idCard);
+        searchParams.append('buildId', params.buildId);
+
+        axios.post('/owner/verify', searchParams, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res => {
             let data = res.data;
             if(data.code === 200) {
                 $("#verifyMsg").text("✅ 身份核验成功！请填写修改申请。").css("color", "green");
@@ -102,8 +109,15 @@
             newPwd: $("#newPwd").val()
         };
 
-        // 假设后端提交申请接口为：/owner/submitApply
-        axios.post('/owner/submitApply', params).then(res => {
+        // 使用 URLSearchParams 转换为表单格式
+        const searchParams = new URLSearchParams();
+        searchParams.append('newPhone', params.newPhone);
+        searchParams.append('newRoom', params.newRoom);
+        searchParams.append('newPwd', params.newPwd);
+
+        axios.post('/owner/submitApply', searchParams, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res => {
             let data = res.data;
             if(data.code === 200) {
                 $("#applyMsg").text("✅ " + data.msg).css("color", "green");
@@ -112,6 +126,8 @@
             } else {
                 $("#applyMsg").text("❌ " + data.msg).css("color", "red");
             }
+        }).catch(() => {
+            $("#applyMsg").text("❌ 网络错误，请稍后重试").css("color", "red");
         });
     });
 </script>

@@ -32,7 +32,15 @@
             password: $("#password").val(),
             ukeyCode: $("#ukeyCode").val()
         }
-        axios.post("/admin/login", loginData).then(res=>{
+        // 使用 URLSearchParams 将 JSON 数据转换为表单格式
+        const params = new URLSearchParams();
+        params.append('username', loginData.username);
+        params.append('password', loginData.password);
+        params.append('ukeyCode', loginData.ukeyCode);
+
+        axios.post("/admin/login", params, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res=>{
             let data = res.data;
             if(data.code === 200){
                 alert("登录成功，跳转记录管理页");
@@ -40,6 +48,8 @@
             }else{
                 $("#loginMsg").text(data.msg).css("color", "red");
             }
+        }).catch(err => {
+            $("#loginMsg").text("网络错误，请稍后重试").css("color", "red");
         })
     })
 </script>

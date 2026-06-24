@@ -90,6 +90,18 @@ public class OwnerDAO {
         DBUtil.update(sql, id);
     }
 
+    // 根据ID查询业主信息
+    public Owner getOwnerById(Integer id) {
+        String sql = "SELECT id, name, id_card, phone, build_id, room_no, entry_pwd, is_confirm FROM owner WHERE id=?";
+        try (Connection conn = DBUtil.getConn(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return mapRowToOwner(rs);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
+    }
+
     // 5. 门禁离开时：根据姓名和密码查询（业主/访客）
     public Owner getOwnerByNameAndPwd(String name, String pwd) {
         String sql = "SELECT id, is_confirm, name, id_card, phone, build_id, room_no, entry_pwd FROM owner WHERE name=? AND entry_pwd=?";

@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +20,14 @@ public class BuildingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json;charset=utf-8");
+
+        // 登录拦截
+        HttpSession session = req.getSession();
+        if (session.getAttribute("loginAdmin") == null) {
+            resp.getWriter().write("{\"code\":401,\"msg\":\"请先登录管理员\"}");
+            return;
+        }
+
         String action = req.getParameter("action");
         if ("list".equals(action)) {
             List<Building> list = buildingDAO.getAllBuildings();
@@ -30,6 +39,14 @@ public class BuildingServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setContentType("application/json;charset=utf-8");
+
+        // 登录拦截
+        HttpSession session = req.getSession();
+        if (session.getAttribute("loginAdmin") == null) {
+            resp.getWriter().write("{\"code\":401,\"msg\":\"请先登录管理员\"}");
+            return;
+        }
+
         String action = req.getParameter("action");
 
         if ("add".equals(action)) {
@@ -54,34 +71,22 @@ public class BuildingServlet extends HttpServlet {
             int id = Integer.parseInt(req.getParameter("id"));
             String name = req.getParameter("buildName");
             String no = req.getParameter("buildNo");
-            // 校验唯一性（排除当前记录）
-            if (buildingDAO.isBuildNoExists(no)) {
-                // 需要判断是否为同一条记录 -- 简化处理：若编号存在且不是当前id则报错
-                resp.getWriter().write("{\"code\":500,\"msg\":\"楼宇编号已存在\"}");
-                return;
-            }
-            if (buildingDAO.isBuildNameExists(name)) {
-                resp.getWriter().write("{\"code\":500,\"msg\":\"楼宇名称已存在\"}");
-                return;
-            }
-            buildingDAO.updateBuilding(id, name, no);
-            resp.getWriter().write("{\"code\":200,\"msg\":\"更新成功\"}");
-        } else if ("update".equals(action)) {
-        int id = Integer.parseInt(req.getParameter("id"));
-        String name = req.getParameter("buildName");
-        String no = req.getParameter("buildNo");
 
-        // 唯一性校验（排除自身ID）
-        if (buildingDAO.isBuildNoExists(no, id)) {
-            resp.getWriter().write("{\"code\":500, \"msg\":\"楼宇编号已存在\"}");
-            return;
+            // 唯一性校验（排除自身ID）
+            if (buildingDAO.isBuildNoExists(no, id)) {
+                resp.getWriter().write("{\"code\":500, \"msg\":\"楼宇编号已存在\"}");
+                return;
+            }
+            if (buildingDAO.isBuildNameExists(name, id)) {
+                resp.getWriter().write("{\"code\":500, \"msg\":\"楼宇名称已存在\"}");
+                return;
+            }
+            Building b = new Building();
+            b.setId(id);
+            b.setBuildName(name);
+            b.setBuildNo(no);
+            buildingDAO.updateBuilding(b);
+            resp.getWriter().write("{\"code\":200, \"msg\":\"修改成功\"}");
         }
-        Building b = new Building();
-        b.setId(id);
-        b.setBuildName(name);
-        b.setBuildNo(no);
-        buildingDAO.updateBuilding(b);
-        resp.getWriter().write("{\"code\":200, \"msg\":\"修改成功\"}");
-    }
     }
 }
