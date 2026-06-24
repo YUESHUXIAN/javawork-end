@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员登录</title>
+    <link rel="stylesheet" href="../common/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../common/css/common.css">
+</head>
+<body class="container mt-5 w-50">
+<h3 class="text-center">管理员登录（需U盾验证）</h3>
+<hr>
+<div class="mb-3">
+    <label>管理员账号</label>
+    <input type="text" id="username" class="form-control">
+</div>
+<div class="mb-3">
+    <label>登录密码</label>
+    <input type="password" id="password" class="form-control">
+</div>
+<div class="mb-3">
+    <label>模拟U盘U盾编码</label>
+    <input type="text" id="ukeyCode" class="form-control" placeholder="测试：UD2026001">
+</div>
+<button id="loginBtn" class="btn btn-primary w-100">登录系统</button>
+<p id="loginMsg" class="mt-3 text-center"></p>
+
+<script src="../common/js/jquery.min.js"></script>
+<script src="../common/js/axios.min.js"></script>
+<script>
+    $("#loginBtn").click(function(){
+        let loginData = {
+            username: $("#username").val(),
+            password: $("#password").val(),
+            ukeyCode: $("#ukeyCode").val()
+        }
+        axios.post("/admin/login", loginData).then(res=>{
+            let data = res.data;
+            if(data.code === 200){
+                alert("登录成功，跳转记录管理页");
+                location.href = "records.html";
+            }else{
+                $("#loginMsg").text(data.msg).css("color", "red");
+            }
+        })
+    })
+</script>
+</body>
+</html>

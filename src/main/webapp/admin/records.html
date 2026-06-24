@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>人员进出记录管理</title>
+    <link rel="stylesheet" href="../common/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../common/css/common.css">
+</head>
+<body class="container mt-4">
+<h3>小区进出人员记录查询</h3>
+<hr>
+<!-- 查询条件区域 -->
+<div class="row mb-4 align-items-center">
+    <div class="col-auto">
+        <label>姓名模糊：</label>
+        <input type="text" id="searchName" class="form-control d-inline w-auto">
+    </div>
+    <div class="col-auto">
+        <label>进入开始时间：</label>
+        <input type="datetime-local" id="startTime" class="form-control d-inline w-auto">
+    </div>
+    <div class="col-auto">
+        <label>进入结束时间：</label>
+        <input type="datetime-local" id="endTime" class="form-control d-inline w-auto">
+    </div>
+    <div class="col-auto">
+        <button id="searchBtn" class="btn btn-primary">查询</button>
+        <button id="exportBtn" class="btn btn-info">导出Excel</button>
+    </div>
+</div>
+
+<!-- 记录表格 -->
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>姓名</th>
+        <th>身份</th>
+        <th>身份证号</th>
+        <th>手机号</th>
+        <th>进入时间</th>
+        <th>离开时间</th>
+        <th>访客临时密码</th>
+    </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+</table>
+
+<script src="../common/js/jquery.min.js"></script>
+<script src="../common/js/axios.min.js"></script>
+<script>
+    // 查询按钮
+    $("#searchBtn").click(function(){
+        let param = {
+            name: $("#searchName").val(),
+            startTime: $("#startTime").val(),
+            endTime: $("#endTime").val()
+        }
+        axios.post("/admin/queryRecord", param).then(res=>{
+            let list = res.data.data;
+            let html = "";
+            list.forEach(item=>{
+                html += `<tr>
+                        <td>${item.name}</td>
+                        <td>${item.isOwner == 1 ? "业主" : "访客"}</td>
+                        <td>${item.idCard}</td>
+                        <td>${item.phone}</td>
+                        <td>${item.enterTime}</td>
+                        <td>${item.leaveTime || "未离开"}</td>
+                        <td>${item.tempPwd || "无"}</td>
+                    </tr>`
+            })
+            $("#tableBody").html(html);
+        })
+    })
+
+    // 导出Excel按钮
+    $("#exportBtn").click(function(){
+        let name = $("#searchName").val();
+        let s = $("#startTime").val();
+        let e = $("#endTime").val();
+        // 新窗口打开导出接口，自动下载文件
+        window.open(`/admin/export?name=${name}&startTime=${s}&endTime=${e}`);
+    })
+</script>
+</body>
+</html>

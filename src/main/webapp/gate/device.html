@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>小区门禁设备</title>
+    <link rel="stylesheet" href="../common/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../common/css/common.css">
+</head>
+<body class="container mt-5">
+<h3>业主进门验证</h3>
+<hr>
+<div class="row mb-3">
+    <label class="col-2">业主姓名：</label>
+    <div class="col-4">
+        <input type="text" id="gName" class="form-control">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-2">门禁密码：</label>
+    <div class="col-4">
+        <input type="password" id="gPwd" class="form-control">
+    </div>
+</div>
+<button id="openDoor" class="btn btn-success">开门验证</button>
+<p id="tipMsg" class="mt-3 fs-5"></p>
+
+<script src="../common/js/jquery.min.js"></script>
+<script src="../common/js/axios.min.js"></script>
+<script>
+    $("#openDoor").click(function(){
+        let data = {
+            name: $("#gName").val(),
+            pwd: $("#gPwd").val()
+        }
+        axios.post("/gate/check", data).then(res=>{
+            let r = res.data;
+            $("#tipMsg").text(r.msg);
+            if(r.code === 200){
+                $("#tipMsg").css("color", "green");
+            }else{
+                $("#tipMsg").css("color", "red");
+            }
+        })
+    })
+</script>
+</body>
+</html>
