@@ -86,4 +86,20 @@ public class AccessRecordDAO {
         Object val = DBUtil.queryValue(sql, tempPwd);
         return val != null ? val.toString() : null;
     }
+
+    // 5. 检查业主是否有未离开的记录（已进入小区但未离开）
+    public boolean hasUnfinishedRecord(String name) {
+        String sql = "SELECT COUNT(*) FROM access_record WHERE name=? AND leave_time IS NULL";
+        Object val = DBUtil.queryValue(sql, name);
+        if (val == null) return false;
+        return ((Number) val).longValue() > 0;
+    }
+
+    // 6. 检查访客是否有未离开的记录（通过临时密码）
+    public boolean hasUnfinishedVisitorRecord(String tempPwd) {
+        String sql = "SELECT COUNT(*) FROM access_record WHERE temp_pwd=? AND leave_time IS NULL";
+        Object val = DBUtil.queryValue(sql, tempPwd);
+        if (val == null) return false;
+        return ((Number) val).longValue() > 0;
+    }
 }

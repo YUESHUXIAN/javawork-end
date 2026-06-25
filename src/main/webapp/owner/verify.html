@@ -32,6 +32,11 @@
             border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
         }
         .btn-submit:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; }
+        .btn-profile {
+            background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
+        }
+        .btn-profile:hover { box-shadow: 0 6px 20px rgba(79,172,254,0.4); color: #fff; }
         .apply-section { display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e0e0e0; }
         .back-link { text-align: center; margin-top: 15px; }
         .back-link a { color: #667eea; text-decoration: none; font-size: 14px; }
@@ -41,7 +46,7 @@
 
 <div class="verify-card">
     <div class="verify-icon">📝</div>
-    <div class="verify-title">业主信息修改申请</div>
+    <div class="verify-title">业主身份核验</div>
 
     <!-- 第一步：身份核验 -->
     <div class="step-label">第一步：身份核验</div>
@@ -65,10 +70,19 @@
     <button id="verifyBtn" class="btn btn-verify">🔍 核验身份</button>
     <p id="verifyMsg" class="mt-2 text-center" style="min-height:20px;"></p>
 
-    <!-- 第二步：提交修改申请（核验成功后显示） -->
+    <!-- 第二步：核验成功后显示两个选项 -->
     <div class="apply-section" id="applyArea">
-        <div class="step-label">第二步：提交修改申请</div>
-        <p style="font-size:13px; color:#888; margin-bottom:15px;">✅ 身份核验通过！请填写需要修改的信息</p>
+        <div class="step-label">第二步：选择操作</div>
+        <p style="font-size:13px; color:#888; margin-bottom:15px;">✅ 身份核验通过！请选择您要进行的操作</p>
+
+        <a href="profile.html" class="menu-btn btn-profile" style="display:block; text-align:center; margin-bottom:12px;">📋 &nbsp;查看个人信息</a>
+        <button class="menu-btn btn-submit" style="display:block; text-align:center; width:100%;" onclick="showApplyForm()">📝 &nbsp;修改个人信息</button>
+    </div>
+
+    <!-- 修改申请表单（点击修改个人信息后显示） -->
+    <div class="apply-section" id="applyFormArea" style="display:none;">
+        <div class="step-label">提交修改申请</div>
+        <p style="font-size:13px; color:#888; margin-bottom:15px;">请填写需要修改的信息</p>
 
         <div class="form-group">
             <label>新手机号</label>
@@ -85,6 +99,7 @@
 
         <button id="submitApplyBtn" class="btn btn-submit">📤 提交修改申请</button>
         <p id="applyMsg" class="mt-2 text-center" style="min-height:20px;"></p>
+        <button class="btn btn-secondary btn-block mt-2" onclick="hideApplyForm()">← 返回选择</button>
     </div>
 
     <div class="back-link"><a href="index.html">← 返回服务中心</a></div>
@@ -109,6 +124,18 @@
             $('#buildId').html('<option value="">加载楼宇失败</option>');
         });
     });
+
+    // 显示修改申请表单
+    function showApplyForm() {
+        $("#applyArea").slideUp(300);
+        $("#applyFormArea").slideDown(300);
+    }
+
+    // 隐藏修改申请表单，返回选择界面
+    function hideApplyForm() {
+        $("#applyFormArea").slideUp(300);
+        $("#applyArea").slideDown(300);
+    }
 
     // 核验身份
     $("#verifyBtn").click(function() {

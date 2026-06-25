@@ -110,8 +110,8 @@
                     <td>${identity}</td>
                     <td><code>${item.idCard || '-'}</code></td>
                     <td>${item.phone || '-'}</td>
-                    <td>${item.enterTime || '-'}</td>
-                    <td>${item.leaveTime || '<span class="text-muted">未离开</span>'}</td>
+                    <td>${formatDate(item.enterTime)}</td>
+                    <td>${item.leaveTime ? formatDate(item.leaveTime) : '<span class="text-muted">未离开</span>'}</td>
                     <td>${item.tempPwd ? '<code>' + item.tempPwd + '</code>' : '<span class="text-muted">-</span>'}</td>
                 </tr>`;
             });

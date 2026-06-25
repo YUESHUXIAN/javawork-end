@@ -237,6 +237,7 @@
             let data = res.data;
             if(data.code == 200) showResult('success', '✅ ' + data.msg);
             else if(data.code == 502) showResult('warn', '⚠️ ' + data.msg);
+            else if(data.code == 503) showResult('warn', '⚠️ ' + data.msg);
             else showResult('error', '❌ ' + (data.msg || '验证失败'));
         }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
     }
@@ -253,10 +254,11 @@
         params.append('isOwner', '1');
         params.append('action', 'leave');
 
-        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, validateStatus: function(s){return s<500;} })
         .then(res => {
             let data = res.data;
             if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else if(data.code == 503) showResult('warn', '⚠️ ' + data.msg);
             else showResult('error', '❌ ' + data.msg);
         }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
     }
@@ -298,10 +300,11 @@
         params.append('isOwner', '0');
         params.append('action', 'enter');
 
-        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, validateStatus: function(s){return s<500;} })
         .then(res => {
             let data = res.data;
             if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else if(data.code == 503) showResult('warn', '⚠️ ' + data.msg);
             else showResult('error', '❌ ' + data.msg);
         }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
     }
@@ -316,10 +319,11 @@
         params.append('isOwner', '0');
         params.append('action', 'leave');
 
-        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, validateStatus: function(s){return s<500;} })
         .then(res => {
             let data = res.data;
             if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else if(data.code == 503) showResult('warn', '⚠️ ' + data.msg);
             else showResult('error', '❌ ' + data.msg);
         }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
     }
