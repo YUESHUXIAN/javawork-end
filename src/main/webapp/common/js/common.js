@@ -43,16 +43,31 @@ function apiPost(url, params) {
     });
 }
 
-// 管理员页面登录检查（在管理员页面的 $(document).ready 中调用）
+// 管理员页面登录检查（本地缓存 + 服务端验证）
 function checkAdminLogin() {
+    // 快速检查本地缓存（避免每次跳转都发 HTTP 请求）
+    var loginTime = sessionStorage.getItem('adminLoginTime');
+    if (loginTime) {
+        var elapsed = Date.now() - parseInt(loginTime);
+        // 30 分钟内认为有效，跳过 HTTP 检查
+        if (elapsed < 30 * 60 * 1000) return;
+    }
+    // 缓存过期或不存在，发请求验证
     axios.get('/admin/checkLogin').then(function(res) {
-        if (res.data.code !== 200) {
+        if (res.data.code === 200) {
+            sessionStorage.setItem('adminLoginTime', Date.now().toString());
+        } else {
+            sessionStorage.removeItem('adminLoginTime');
             alert('请先登录管理员');
             window.location.href = CTX + '/admin/index.html';
         }
-    }).catch(function() {
-        // 网络错误时不跳转，避免循环
-    });
+    }).catch(function() {});
+}
+
+// 管理员退出登录
+function adminLogout() {
+    sessionStorage.removeItem('adminLoginTime');
+    window.location.href = CTX + '/admin/logout';
 }
 
 console.log('[common.js] 上下文路径: "' + CTX + '"');

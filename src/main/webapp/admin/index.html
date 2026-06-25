@@ -73,6 +73,7 @@
         apiPost('/admin/login', params).then(res => {
             let data = res.data;
             if(data.code === 200) {
+                sessionStorage.setItem('adminLoginTime', Date.now().toString());
                 $("#loginMsg").text("✅ 登录成功，正在跳转...").css("color", "#43e97b");
                 setTimeout(() => { location.href = "records.html"; }, 600);
             } else {
