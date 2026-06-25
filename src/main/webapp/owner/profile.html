@@ -2,54 +2,94 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的个人信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息 - 智慧小区</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
+    <style>
+        body { display: flex; align-items: flex-start; justify-content: center; min-height: 100vh; margin: 0; padding: 40px 15px; }
+        .profile-card {
+            max-width: 500px; width: 100%; padding: 35px; background: #fff;
+            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .profile-icon { font-size: 42px; text-align: center; margin-bottom: 8px; }
+        .profile-title { text-align: center; font-weight: 700; color: #2c3e50; margin-bottom: 25px; font-size: 20px; }
+        .info-row { display: flex; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .info-label { width: 100px; font-weight: 600; color: #555; font-size: 14px; flex-shrink: 0; }
+        .info-value { flex: 1; color: #333; font-size: 14px; }
+        .back-link { text-align: center; margin-top: 20px; }
+        .back-link a { color: #667eea; text-decoration: none; font-size: 14px; margin: 0 10px; }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h3>👤 我的个人信息</h3>
-    <hr>
-    <div class="card">
-        <div class="card-body" id="infoBody">
-            <p class="text-center text-muted">正在加载数据...</p>
-        </div>
+
+<div class="profile-card">
+    <div class="profile-icon">👤</div>
+    <div class="profile-title">我的个人信息</div>
+
+    <div id="infoBody">
+        <p class="text-center text-muted py-4">正在加载数据...</p>
     </div>
-    <div class="mt-3">
-        <a href="index.html" class="btn btn-secondary btn-sm">返回首页</a>
+
+    <div class="back-link">
+        <a href="verify.html">📝 去核验身份</a>
+        <a href="index.html">← 返回服务中心</a>
     </div>
 </div>
 
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<script src="../common/js/common.js"></script>
 <script>
     $(document).ready(function() {
-        // 假设后端接口为 /owner/profile，GET 请求，获取当前登录业主信息
-        axios.get('/owner/profile').then(res => {
-            let data = res.data; // 假设返回的是一个 Owner 对象
+        axios.get('/owner/profile', {
+            validateStatus: function(status) { return status < 500; }
+        }).then(res => {
+            let data = res.data;
+            if(data.code === 401) {
+                $("#infoBody").html(`
+                    <div class="text-center py-4">
+                        <p style="font-size:48px;">🔒</p>
+                        <p style="font-size:16px; font-weight:600; color:#333;">尚未核验身份</p>
+                        <p class="text-muted" style="font-size:13px; margin-bottom:15px;">${data.msg || '请先进行身份核验后再查看个人信息'}</p>
+                        <a href="verify.html" class="btn btn-primary" style="border-radius:50px; padding:10px 30px;">📝 去核验身份</a>
+                    </div>`);
+                return;
+            }
             if(data.code && data.code !== 200) {
-                $("#infoBody").html('<p class="text-danger">获取信息失败，请重新登录。</p>');
+                $("#infoBody").html(`
+                    <div class="text-center py-4">
+                        <p style="font-size:48px;">⚠️</p>
+                        <p class="text-danger">${data.msg || '获取信息失败'}</p>
+                    </div>`);
                 return;
             }
 
-            // 字段映射，需确保与你后端 Owner 实体类字段一致
-            let statusHtml = data.isConfirm == 1 ?
-                '<span class="badge badge-success">已审核</span>' :
-                '<span class="badge badge-warning">待审核</span>';
+            let statusHtml = data.isConfirm == 1
+                ? '<span class="badge badge-success">已审核</span>'
+                : '<span class="badge badge-warning">待审核</span>';
 
             let html = `
-                <div class="row"><div class="col-md-3 font-weight-bold">业主姓名：</div><div class="col-md-9">${data.name || '-'}</div></div><hr>
-                <div class="row"><div class="col-md-3 font-weight-bold">身份证号：</div><div class="col-md-9">${data.idCard || '-'}</div></div><hr>
-                <div class="row"><div class="col-md-3 font-weight-bold">所属楼栋ID：</div><div class="col-md-9">${data.buildId || '-'}</div></div><hr>
-                <div class="row"><div class="col-md-3 font-weight-bold">门牌号：</div><div class="col-md-9">${data.roomNo || '-'}</div></div><hr>
-                <div class="row"><div class="col-md-3 font-weight-bold">手机号：</div><div class="col-md-9">${data.phone || '-'}</div></div><hr>
-                <div class="row"><div class="col-md-3 font-weight-bold">门禁密码：</div><div class="col-md-9">${data.entryPwd || '-'}</div></div><hr>
-                <div class="row"><div class="col-md-3 font-weight-bold">审核状态：</div><div class="col-md-9">${statusHtml}</div></div>
+                <div class="info-row"><div class="info-label">业主姓名</div><div class="info-value">${data.name || '-'}</div></div>
+                <div class="info-row"><div class="info-label">身份证号</div><div class="info-value"><code>${data.idCard || '-'}</code></div></div>
+                <div class="info-row"><div class="info-label">所属楼栋</div><div class="info-value">${data.buildId || '-'}</div></div>
+                <div class="info-row"><div class="info-label">门牌号</div><div class="info-value">${data.roomNo || '<span class="text-muted">未设置</span>'}</div></div>
+                <div class="info-row"><div class="info-label">手机号</div><div class="info-value">${data.phone || '<span class="text-muted">未设置</span>'}</div></div>
+                <div class="info-row"><div class="info-label">门禁密码</div><div class="info-value">${data.entryPwd ? '••••••' : '<span class="text-muted">未设置</span>'}</div></div>
+                <div class="info-row"><div class="info-label">审核状态</div><div class="info-value">${statusHtml}</div></div>
             `;
             $("#infoBody").html(html);
         }).catch(err => {
-            $("#infoBody").html('<p class="text-danger">网络异常，请稍后重试。</p>');
+            console.error("加载个人信息失败:", err);
+            $("#infoBody").html(`
+                <div class="text-center py-4">
+                    <p style="font-size:48px;">🌐</p>
+                    <p class="text-danger">加载失败</p>
+                    <p class="text-muted" style="font-size:12px;">${err.message || '请检查网络连接'}</p>
+                </div>`);
         });
     });
 </script>

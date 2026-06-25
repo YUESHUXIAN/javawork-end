@@ -2,132 +2,174 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>身份核验与修改申请</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身份核验 - 智慧小区</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
     <style>
-        .step-title { font-weight: 600; color: #007bff; }
+        body { display: flex; align-items: flex-start; justify-content: center; min-height: 100vh; margin: 0; padding: 40px 15px; }
+        .verify-card {
+            max-width: 500px; width: 100%; padding: 35px; background: #fff;
+            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .verify-icon { font-size: 42px; text-align: center; margin-bottom: 8px; }
+        .verify-title { text-align: center; font-weight: 700; color: #2c3e50; margin-bottom: 25px; font-size: 20px; }
+        .step-label {
+            background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
+            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
+            display: inline-block; margin-bottom: 15px;
+        }
+        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
+        .btn-verify {
+            background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
+        }
+        .btn-verify:hover { box-shadow: 0 6px 20px rgba(102,126,234,0.4); color: #fff; }
+        .btn-submit {
+            background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
+        }
+        .btn-submit:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; }
+        .apply-section { display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e0e0e0; }
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #667eea; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h3>📝 业主信息修改申请</h3>
-    <hr>
 
-    <div class="row">
-        <!-- 左侧：身份核验区 -->
-        <div class="col-md-6 border-right">
-            <h5 class="step-title">第一步：身份核验</h5>
-            <p class="text-muted small">请输入您在小区物业登记的原始信息进行核验。</p>
-            <div class="form-group">
-                <label>业主姓名：</label>
-                <input type="text" id="name" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>身份证号：</label>
-                <input type="text" id="idCard" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>所属楼栋ID：</label>
-                <input type="number" id="buildId" class="form-control" placeholder="例如 1">
-            </div>
-            <button id="verifyBtn" class="btn btn-primary w-100">核验身份</button>
-            <p id="verifyMsg" class="mt-2 text-center"></p>
-        </div>
+<div class="verify-card">
+    <div class="verify-icon">📝</div>
+    <div class="verify-title">业主信息修改申请</div>
 
-        <!-- 右侧：申请修改区 (初始隐藏) -->
-        <div class="col-md-6" id="applyArea" style="display: none;">
-            <h5 class="step-title">第二步：提交修改申请</h5>
-            <p class="text-muted small">身份验证通过！请填写需要修改的新信息。</p>
-            <div class="form-group">
-                <label>新手机号：</label>
-                <input type="text" id="newPhone" class="form-control">
-            </div>
-            <div class="form-group">
-                <label>新门牌号：</label>
-                <input type="text" id="newRoom" class="form-control" placeholder="如 1-101">
-            </div>
-            <div class="form-group">
-                <label>新门禁密码：</label>
-                <input type="password" id="newPwd" class="form-control" placeholder="请设置新密码">
-            </div>
-            <button id="submitApplyBtn" class="btn btn-success w-100">提交修改申请</button>
-            <p id="applyMsg" class="mt-2 text-center"></p>
-        </div>
+    <!-- 第一步：身份核验 -->
+    <div class="step-label">第一步：身份核验</div>
+    <p style="font-size:13px; color:#888; margin-bottom:15px;">请输入物业登记的原始信息进行核验</p>
+
+    <div class="form-group">
+        <label>业主姓名</label>
+        <input type="text" id="name" class="form-control" placeholder="请输入登记姓名">
+    </div>
+    <div class="form-group">
+        <label>身份证号</label>
+        <input type="text" id="idCard" class="form-control" placeholder="请输入18位身份证号">
+    </div>
+    <div class="form-group">
+        <label>所属楼宇</label>
+        <select id="buildId" class="form-control">
+            <option value="">请选择楼宇</option>
+        </select>
     </div>
 
-    <div class="mt-3">
-        <a href="index.html" class="btn btn-secondary btn-sm">返回首页</a>
+    <button id="verifyBtn" class="btn btn-verify">🔍 核验身份</button>
+    <p id="verifyMsg" class="mt-2 text-center" style="min-height:20px;"></p>
+
+    <!-- 第二步：提交修改申请（核验成功后显示） -->
+    <div class="apply-section" id="applyArea">
+        <div class="step-label">第二步：提交修改申请</div>
+        <p style="font-size:13px; color:#888; margin-bottom:15px;">✅ 身份核验通过！请填写需要修改的信息</p>
+
+        <div class="form-group">
+            <label>新手机号</label>
+            <input type="text" id="newPhone" class="form-control" placeholder="请输入新手机号">
+        </div>
+        <div class="form-group">
+            <label>新房间号</label>
+            <input type="text" id="newRoom" class="form-control" placeholder="如：1-101">
+        </div>
+        <div class="form-group">
+            <label>新门禁密码</label>
+            <input type="password" id="newPwd" class="form-control" placeholder="请设置新的门禁密码">
+        </div>
+
+        <button id="submitApplyBtn" class="btn btn-submit">📤 提交修改申请</button>
+        <p id="applyMsg" class="mt-2 text-center" style="min-height:20px;"></p>
     </div>
+
+    <div class="back-link"><a href="index.html">← 返回服务中心</a></div>
 </div>
 
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<script src="../common/js/common.js"></script>
 <script>
-    // 1. 核验身份
-    $("#verifyBtn").click(function() {
-        let params = {
-            name: $("#name").val(),
-            idCard: $("#idCard").val(),
-            buildId: $("#buildId").val()
-        };
-        if(!params.name || !params.idCard || !params.buildId) {
-            $("#verifyMsg").text("请填写完整信息！").css("color", "red");
-            return;
-        }
-
-        // 使用 URLSearchParams 转换为表单格式
-        const searchParams = new URLSearchParams();
-        searchParams.append('name', params.name);
-        searchParams.append('idCard', params.idCard);
-        searchParams.append('buildId', params.buildId);
-
-        axios.post('/owner/verify', searchParams, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        }).then(res => {
-            let data = res.data;
-            if(data.code === 200) {
-                $("#verifyMsg").text("✅ 身份核验成功！请填写修改申请。").css("color", "green");
-                $("#applyArea").slideDown(); // 显示右侧修改区
-                // 将核验成功的业主ID存起来，或者前端通过 Session 拿，这里假设后端 Session 处理了
-                // 下面提交申请时直接调用接口，后端从 Session 拿 ID
-            } else {
-                $("#verifyMsg").text("❌ " + data.msg).css("color", "red");
-                $("#applyArea").slideUp();
-            }
-        }).catch(() => {
-             $("#verifyMsg").text("❌ 网络错误").css("color", "red");
+    // 加载楼宇列表（公共API无需登录）
+    $(document).ready(function() {
+        axios.get('/api/buildings').then(res => {
+            let list = res.data;
+            let options = '<option value="">请选择楼宇</option>';
+            list.forEach(b => {
+                options += `<option value="${b.id}">${b.buildName}（${b.buildNo}）</option>`;
+            });
+            $('#buildId').html(options);
+        }).catch(err => {
+            console.error('加载楼宇列表失败:', err);
+            $('#buildId').html('<option value="">加载楼宇失败</option>');
         });
     });
 
-    // 2. 提交修改申请
-    $("#submitApplyBtn").click(function() {
-        let params = {
-            newPhone: $("#newPhone").val(),
-            newRoom: $("#newRoom").val(),
-            newPwd: $("#newPwd").val()
-        };
+    // 核验身份
+    $("#verifyBtn").click(function() {
+        let name = $("#name").val().trim();
+        let idCard = $("#idCard").val().trim();
+        let buildId = $("#buildId").val();
 
-        // 使用 URLSearchParams 转换为表单格式
-        const searchParams = new URLSearchParams();
-        searchParams.append('newPhone', params.newPhone);
-        searchParams.append('newRoom', params.newRoom);
-        searchParams.append('newPwd', params.newPwd);
+        if(!name || !idCard || !buildId) {
+            $("#verifyMsg").text("请填写完整信息！").css("color", "#f5576c");
+            return;
+        }
 
-        axios.post('/owner/submitApply', searchParams, {
+        const params = new URLSearchParams();
+        params.append('name', name);
+        params.append('idCard', idCard);
+        params.append('buildId', buildId);
+
+        axios.post('/owner/verify', params, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).then(res => {
             let data = res.data;
             if(data.code === 200) {
-                $("#applyMsg").text("✅ " + data.msg).css("color", "green");
-                // 提交成功可清空表单
-                $("#newPhone, #newRoom, #newPwd").val('');
+                $("#verifyMsg").text("✅ 身份核验成功！").css("color", "#43e97b");
+                $("#applyArea").slideDown(300);
             } else {
-                $("#applyMsg").text("❌ " + data.msg).css("color", "red");
+                $("#verifyMsg").text("❌ " + data.msg).css("color", "#f5576c");
+                $("#applyArea").slideUp(300);
             }
         }).catch(() => {
-            $("#applyMsg").text("❌ 网络错误，请稍后重试").css("color", "red");
+            $("#verifyMsg").text("❌ 网络错误").css("color", "#f5576c");
+        });
+    });
+
+    // 提交修改申请
+    $("#submitApplyBtn").click(function() {
+        let newPhone = $("#newPhone").val().trim();
+        let newRoom = $("#newRoom").val().trim();
+        let newPwd = $("#newPwd").val().trim();
+
+        if(!newPhone || !newRoom || !newPwd) {
+            $("#applyMsg").text("请填写完整的修改信息！").css("color", "#f5576c");
+            return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('newPhone', newPhone);
+        params.append('newRoom', newRoom);
+        params.append('newPwd', newPwd);
+
+        axios.post('/owner/submitApply', params, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res => {
+            let data = res.data;
+            if(data.code === 200) {
+                $("#applyMsg").text("✅ " + data.msg).css("color", "#43e97b");
+                $("#newPhone, #newRoom, #newPwd").val('');
+            } else {
+                $("#applyMsg").text("❌ " + data.msg).css("color", "#f5576c");
+            }
+        }).catch(() => {
+            $("#applyMsg").text("❌ 网络错误，请稍后重试").css("color", "#f5576c");
         });
     });
 </script>

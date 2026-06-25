@@ -22,30 +22,27 @@ public class OwnerProfileServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
-        // 从Session获取已核验的业主ID
-        HttpSession session = request.getSession();
-        Integer ownerId = (Integer) session.getAttribute("verifiedOwnerId");
-
-        if (ownerId == null) {
-            json.put("code", 401);
-            json.put("msg", "请先进行身份核验");
-            out.write(json.toString());
-            return;
-        }
-
         try {
-            // 根据ID查询业主完整信息
-            Owner owner = ownerDao.getOwnerById(ownerId);
+            HttpSession session = request.getSession();
+            Integer ownerId = (Integer) session.getAttribute("verifiedOwnerId");
 
+            if (ownerId == null) {
+                json.put("code", 401);
+                json.put("msg", "请先进行身份核验");
+                out.write(json.toString());
+                return;
+            }
+
+            Owner owner = ownerDao.getOwnerById(ownerId);
             if (owner != null) {
                 json.put("code", 200);
-                json.put("name", owner.getName());
-                json.put("idCard", owner.getIdCard());
+                json.put("name", owner.getName() != null ? owner.getName() : "");
+                json.put("idCard", owner.getIdCard() != null ? owner.getIdCard() : "");
                 json.put("phone", owner.getPhone() != null ? owner.getPhone() : "");
-                json.put("buildId", owner.getBuildId());
+                json.put("buildId", owner.getBuildId() != null ? owner.getBuildId() : 0);
                 json.put("roomNo", owner.getRoomNo() != null ? owner.getRoomNo() : "");
                 json.put("entryPwd", owner.getEntryPwd() != null ? owner.getEntryPwd() : "");
-                json.put("isConfirm", owner.getIsConfirm());
+                json.put("isConfirm", owner.getIsConfirm() != null ? owner.getIsConfirm() : 0);
             } else {
                 json.put("code", 500);
                 json.put("msg", "未找到业主信息");
@@ -53,7 +50,7 @@ public class OwnerProfileServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             json.put("code", 500);
-            json.put("msg", "系统错误，请稍后重试");
+            json.put("msg", "系统错误: " + e.getMessage());
         }
 
         out.write(json.toString());

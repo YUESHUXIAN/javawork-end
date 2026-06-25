@@ -79,4 +79,33 @@ public class OwnerApplyDAO {
         String sql = "UPDATE owner_apply SET status=? WHERE id=?";
         return DBUtil.update(sql, status, id);
     }
+
+    /**
+     * 查询所有申请，关联业主姓名和楼栋信息
+     */
+    public List<OwnerApply> getAllAppliesWithOwnerInfo() {
+        List<OwnerApply> list = new ArrayList<>();
+        String sql = "SELECT a.id, a.owner_id, a.new_phone, a.new_room, a.new_pwd, a.apply_time, a.status, " +
+                "o.name AS owner_name, o.id_card AS owner_id_card, o.build_id AS owner_build_id " +
+                "FROM owner_apply a LEFT JOIN owner o ON a.owner_id = o.id ORDER BY a.apply_time DESC";
+        try (Connection conn = DBUtil.getConn();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                OwnerApply a = new OwnerApply();
+                a.setId(rs.getInt("id"));
+                a.setOwnerId(rs.getInt("owner_id"));
+                a.setNewPhone(rs.getString("new_phone"));
+                a.setNewRoom(rs.getString("new_room"));
+                a.setNewPwd(rs.getString("new_pwd"));
+                a.setApplyTime(rs.getTimestamp("apply_time"));
+                a.setStatus(rs.getInt("status"));
+                a.setOwnerName(rs.getString("owner_name"));
+                a.setOwnerIdCard(rs.getString("owner_id_card"));
+                a.setOwnerBuildId(rs.getInt("owner_build_id"));
+                list.add(a);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
+    }
 }

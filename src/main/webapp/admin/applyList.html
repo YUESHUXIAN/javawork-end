@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申请审核 - 智慧小区</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../common/css/common.css">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 12px 0;">
+    <div class="container-fluid" style="max-width:1200px;">
+        <a class="navbar-brand text-white font-weight-bold" href="#">🏘️ 智慧小区管理后台</a>
+        <div class="navbar-nav ml-auto">
+            <a class="nav-link text-white-50" href="records.html">📊 进出记录</a>
+            <a class="nav-link text-white-50" href="buiding.html">🏢 楼宇管理</a>
+            <a class="nav-link text-white-50" href="owner.html">👥 业主管理</a>
+            <a class="nav-link text-white font-weight-bold" href="applyList.html">📋 申请审核</a>
+            <a class="nav-link text-white-50" href="index.html">🚪 退出</a>
+        </div>
+    </div>
+</nav>
+
+<div class="main-container">
+    <div class="page-header">
+        <h3>业主信息修改申请审核</h3>
+        <button class="btn btn-secondary" onclick="loadApplies()">🔄 刷新</button>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th width="60">ID</th>
+            <th>业主姓名</th>
+            <th>身份证号</th>
+            <th>所属楼宇</th>
+            <th>新手机号</th>
+            <th>新房间号</th>
+            <th>申请时间</th>
+            <th width="90">状态</th>
+            <th width="180">操作</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <tr><td colspan="9" class="text-center text-muted py-4">加载中...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<script src="../common/js/common.js"></script>
+<script>
+    checkAdminLogin(); // 登录拦截
+
+    let buildingMap = {};
+
+    $(document).ready(function() {
+        loadBuildings(function() { loadApplies(); });
+    });
+
+    function loadBuildings(callback) {
+        axios.get('/api/buildings').then(res => {
+            let list = res.data;
+            list.forEach(b => { buildingMap[b.id] = b.buildName; });
+            if(callback) callback();
+        }).catch(err => {
+            console.error('加载楼宇列表失败:', err);
+            if(callback) callback();
+        });
+    }
+
+    function loadApplies() {
+        axios.get('/admin/owner', { params: { action: 'applyList' } }).then(res => {
+            let data = res.data;
+            if(data.code === 401) { alert(data.msg); window.location.href = 'index.html'; return; }
+            let list = data;
+            if(list.length === 0) {
+                $('#tableBody').html('<tr><td colspan="9" class="text-center text-muted py-4">暂无申请记录</td></tr>');
+                return;
+            }
+            let html = '';
+            list.forEach(item => {
+                let statusHtml = '';
+                let actionHtml = '';
+                if(item.status == 0) {
+                    statusHtml = '<span class="badge badge-warning">待审核</span>';
+                    actionHtml = `
+                        <button class="btn btn-sm btn-success action-btn" onclick="approveApply(${item.id})">✅ 通过</button>
+                        <button class="btn btn-sm btn-danger action-btn" onclick="rejectApply(${item.id})">❌ 拒绝</button>`;
+                } else if(item.status == 1) {
+                    statusHtml = '<span class="badge badge-success">已通过</span>';
+                    actionHtml = '<span class="text-muted">已处理</span>';
+                } else if(item.status == 2) {
+                    statusHtml = '<span class="badge badge-danger">已拒绝</span>';
+                    actionHtml = '<span class="text-muted">已处理</span>';
+                }
+                let buildName = buildingMap[item.ownerBuildId] || ('ID:' + item.ownerBuildId);
+                html += `<tr>
+                    <td>${item.id}</td>
+                    <td><strong>${item.ownerName || '-'}</strong></td>
+                    <td><code>${item.ownerIdCard || '-'}</code></td>
+                    <td>${buildName}</td>
+                    <td>${item.newPhone || '-'}</td>
+                    <td>${item.newRoom || '-'}</td>
+                    <td>${item.applyTime || '-'}</td>
+                    <td>${statusHtml}</td>
+                    <td>${actionHtml}</td>
+                </tr>`;
+            });
+            $('#tableBody').html(html);
+        }).catch(() => {
+            $('#tableBody').html('<tr><td colspan="9" class="text-center text-danger py-4">加载失败</td></tr>');
+        });
+    }
+
+    function approveApply(applyId) {
+        if(!confirm('确定审核通过该申请？通过后业主信息将立即更新。')) return;
+        let params = new URLSearchParams();
+        params.append('action', 'approveApply');
+        params.append('applyId', applyId);
+
+        axios.post('/admin/owner', params).then(res => {
+            let data = res.data;
+            if(data.code === 401) { alert(data.msg); window.location.href = 'index.html'; return; }
+            alert(data.msg);
+            if(data.code === 200) loadApplies();
+        }).catch(() => { alert("网络错误"); });
+    }
+
+    function rejectApply(applyId) {
+        if(!confirm('确定拒绝该申请？')) return;
+        let params = new URLSearchParams();
+        params.append('action', 'rejectApply');
+        params.append('applyId', applyId);
+
+        axios.post('/admin/owner', params).then(res => {
+            let data = res.data;
+            if(data.code === 401) { alert(data.msg); window.location.href = 'index.html'; return; }
+            alert(data.msg);
+            if(data.code === 200) loadApplies();
+        }).catch(() => { alert("网络错误"); });
+    }
+</script>
+</body>
+</html>

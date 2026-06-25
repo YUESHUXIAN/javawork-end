@@ -18,40 +18,37 @@ public class OwnerVerifyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
 
-        String name = request.getParameter("name");
-        String idCard = request.getParameter("idCard");
-        String buildIdStr = request.getParameter("buildId");
-
-        // 参数验证
-        if (name == null || name.trim().isEmpty() || idCard == null || idCard.trim().isEmpty() || buildIdStr == null || buildIdStr.trim().isEmpty()) {
-            json.put("code", 500);
-            json.put("msg", "请填写完整的核验信息");
-            out.write(json.toString());
-            return;
-        }
-
         try {
-            Integer buildId = Integer.parseInt(buildIdStr);
-            // 调用 DAO 进行身份核验
+            String name = request.getParameter("name");
+            String idCard = request.getParameter("idCard");
+            String buildIdStr = request.getParameter("buildId");
+
+            if (name == null || name.trim().isEmpty() ||
+                idCard == null || idCard.trim().isEmpty() ||
+                buildIdStr == null || buildIdStr.trim().isEmpty()) {
+                json.put("code", 500);
+                json.put("msg", "请填写完整的核验信息");
+                out.write(json.toString());
+                return;
+            }
+
+            Integer buildId = Integer.parseInt(buildIdStr.trim());
             Owner owner = ownerDao.findOwnerByInfo(name.trim(), idCard.trim(), buildId);
 
             if (owner != null) {
-                // 核验成功，将业主ID存入Session
                 HttpSession session = request.getSession();
                 session.setAttribute("verifiedOwnerId", owner.getId());
                 session.setAttribute("verifiedOwnerName", name.trim());
-
                 json.put("code", 200);
                 json.put("msg", "身份核验成功");
                 json.put("ownerId", owner.getId());
             } else {
                 json.put("code", 500);
-                json.put("msg", "姓名、身份证号或楼栋信息不匹配，请重新输入");
+                json.put("msg", "姓名、身份证号或楼栋信息不匹配");
             }
         } catch (NumberFormatException e) {
             json.put("code", 500);
@@ -59,7 +56,7 @@ public class OwnerVerifyServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             json.put("code", 500);
-            json.put("msg", "系统错误，请稍后重试");
+            json.put("msg", "系统错误: " + e.getMessage());
         }
 
         out.write(json.toString());

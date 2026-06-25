@@ -2,94 +2,72 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>智慧小区管理系统 - 首页</title>
-    <!-- 引入在线 Bootstrap CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧小区管理系统</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
-        /* 全屏背景图设置 (复用你 images 文件夹下的图片) */
         body, html {
             height: 100%;
             margin: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* 引用你刚加的图片作为首页背景 */
-            background-image: url('images/3.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
         }
 
-        /* 半透明遮罩，保证文字清晰 */
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* 黑色半透明遮罩 */
-            z-index: 0;
-        }
-
-        /* 入口卡片 */
         .entry-card {
-            position: relative;
-            z-index: 1;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             padding: 50px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 450px;
+            max-width: 460px;
             width: 90%;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .entry-title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 10px;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .entry-sub {
-            color: #6c757d;
-            margin-bottom: 30px;
-        }
+        .logo-icon { font-size: 56px; margin-bottom: 15px; }
+        .entry-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .entry-sub { color: #8e99a4; margin-bottom: 35px; font-size: 14px; }
 
         .entry-card .btn {
-            width: 80%;
-            padding: 12px;
-            font-size: 18px;
-            margin: 10px 0;
-            border-radius: 50px;
+            width: 85%; padding: 14px; font-size: 16px; font-weight: 600;
+            margin: 10px auto; border-radius: 50px; display: block;
+            transition: all 0.3s ease; border: none;
         }
+        .entry-card .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+
+        .btn-admin { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+        .btn-owner { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; }
+        .btn-gate  { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; }
+
+        .divider { height: 1px; background: #e8e8e8; margin: 25px 0; }
+        .footer-text { color: #aaa; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<!-- 背景遮罩层 -->
-<div class="overlay"></div>
-
-<!-- 主入口卡片 -->
 <div class="entry-card">
-    <div class="entry-title">🏡 智慧小区管理系统</div>
-    <div class="entry-sub">Community Access System</div>
-    <hr>
+    <div class="logo-icon">🏘️</div>
+    <div class="entry-title">智慧小区管理系统</div>
+    <div class="entry-sub">Community Access Management System</div>
 
-    <!-- 入口 1：管理员端 -->
-    <a href="admin/index.html" class="btn btn-primary">
-        🔐 管理员登录
-    </a>
+    <a href="admin/index.html" class="btn btn-admin">🔐 &nbsp;管理员登录</a>
+    <a href="owner/index.html" class="btn btn-owner">👤 &nbsp;业主服务中心</a>
 
-    <!-- 入口 2：业主端 -->
-    <a href="owner/index.html" class="btn btn-success">
-        👤 业主入口
-    </a>
+    <div class="divider"></div>
 
-    <div class="mt-3">
-        <small class="text-muted">门禁设备终端请前往 <a href="gate/device.html">Gate 设备</a></small>
-    </div>
+    <a href="gate/device.html" class="btn btn-gate">🚪 &nbsp;门禁设备终端</a>
+
+    <div class="footer-text">© 2026 智慧小区管理系统</div>
 </div>
 
-<!-- 引入 Bootstrap JS -->
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 </body>

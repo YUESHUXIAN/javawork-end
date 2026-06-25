@@ -2,129 +2,327 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>小区门禁设备</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>门禁设备终端 - 智慧小区</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
-</head>
-<body class="container mt-5">
-<h3>业主进门验证</h3>
-<hr>
-<div class="row mb-3">
-    <label class="col-2">业主姓名：</label>
-    <div class="col-4">
-        <input type="text" id="gName" class="form-control">
-    </div>
-</div>
-<div class="row mb-3">
-    <label class="col-2">门禁密码：</label>
-    <div class="col-4">
-        <input type="password" id="gPwd" class="form-control">
-    </div>
-</div>
-<hr>
-<div class="row mb-3">
-    <div class="col-2">身份选择：</div>
-    <div class="col-4">
-        <select id="identitySel" class="form-control">
-            <option value="1">业主</option>
-            <option value="0">访客</option>
-        </select>
-    </div>
-</div>
+    <style>
+        body {
+            display: flex; align-items: flex-start; justify-content: center;
+            min-height: 100vh; margin: 0; padding: 30px 15px;
+        }
+        .gate-card {
+            max-width: 520px; width: 100%; background: #fff;
+            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            overflow: hidden; animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
-<div id="visitorDiv" style="display:none;"> <!-- 访客专属区域 -->
-    <div class="row mb-3">
-        <div class="col-2">身份证：</div>
-        <div class="col-4"><input type="text" id="vIdCard" class="form-control"></div>
+        .gate-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff; padding: 25px; text-align: center;
+        }
+        .gate-header h3 { margin: 0; font-weight: 700; font-size: 22px; }
+        .gate-header p { margin: 5px 0 0; opacity: 0.8; font-size: 13px; }
+
+        .gate-body { padding: 30px; }
+
+        /* 模式切换 */
+        .mode-tabs {
+            display: flex; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;
+        }
+        .mode-tab {
+            flex: 1; padding: 12px; text-align: center; cursor: pointer;
+            font-weight: 600; font-size: 14px; transition: all 0.3s;
+            background: #f0f0f0; color: #666; border: none;
+        }
+        .mode-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
+        }
+
+        /* 动作切换 */
+        .action-tabs {
+            display: flex; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .action-tab {
+            flex: 1; padding: 10px; text-align: center; cursor: pointer;
+            font-weight: 500; font-size: 13px; transition: all 0.3s;
+            background: #f8f8f8; color: #888; border: none;
+        }
+        .action-tab.active { background: #43e97b; color: #fff; }
+        .action-tab.leave.active { background: #f5576c; color: #fff; }
+
+        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
+        .btn-gate {
+            background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600; width: 100%;
+        }
+        .btn-gate:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; }
+        .btn-leave {
+            background: linear-gradient(135deg, #f5576c, #ff6a88); color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600; width: 100%;
+        }
+        .btn-leave:hover { box-shadow: 0 6px 20px rgba(245,87,108,0.4); color: #fff; }
+
+        .result-box {
+            margin-top: 20px; padding: 15px; border-radius: 10px;
+            text-align: center; font-size: 16px; font-weight: 600;
+            display: none;
+        }
+        .result-success { background: #e8f8f0; color: #27ae60; border: 1px solid #a3e4c1; }
+        .result-error { background: #fde8e8; color: #e74c3c; border: 1px solid #f5a3a3; }
+        .result-warn { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+
+        .temp-pwd-box {
+            background: #f0f0ff; border: 2px dashed #667eea; border-radius: 10px;
+            padding: 15px; text-align: center; margin-top: 15px; display: none;
+        }
+        .temp-pwd-box .pwd-label { font-size: 13px; color: #888; margin-bottom: 5px; }
+        .temp-pwd-box .pwd-value { font-size: 28px; font-weight: 700; color: #667eea; letter-spacing: 3px; }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #667eea; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="gate-card">
+    <div class="gate-header">
+        <h3>🏘️ 小区门禁终端</h3>
+        <p>Community Gate Access Terminal</p>
     </div>
-    <div class="row mb-3">
-        <div class="col-2">手机号：</div>
-        <div class="col-4"><input type="text" id="vPhone" class="form-control"></div>
+
+    <div class="gate-body">
+        <!-- 身份选择 -->
+        <div class="mode-tabs">
+            <button class="mode-tab active" onclick="switchMode('owner')">👤 业主</button>
+            <button class="mode-tab" onclick="switchMode('visitor')">🚶 访客</button>
+        </div>
+
+        <!-- 进出选择 -->
+        <div class="action-tabs">
+            <button class="action-tab active" onclick="switchAction('enter')">🚪 进入小区</button>
+            <button class="action-tab leave" onclick="switchAction('leave')">🚶 离开小区</button>
+        </div>
+
+        <!-- ========== 业主进入 ========== -->
+        <div class="section active" id="ownerEnter">
+            <div class="form-group">
+                <label>业主姓名</label>
+                <input type="text" id="oeName" class="form-control" placeholder="请输入姓名">
+            </div>
+            <div class="form-group">
+                <label>门禁密码</label>
+                <input type="password" id="oePwd" class="form-control" placeholder="请输入门禁密码">
+            </div>
+            <button class="btn btn-gate" onclick="ownerEnter()">🔓 验证并开门</button>
+        </div>
+
+        <!-- ========== 业主离开 ========== -->
+        <div class="section" id="ownerLeave">
+            <div class="form-group">
+                <label>业主姓名</label>
+                <input type="text" id="olName" class="form-control" placeholder="请输入姓名">
+            </div>
+            <div class="form-group">
+                <label>门禁密码</label>
+                <input type="password" id="olPwd" class="form-control" placeholder="请输入门禁密码">
+            </div>
+            <button class="btn btn-leave" onclick="ownerLeave()">🔒 验证并离开</button>
+        </div>
+
+        <!-- ========== 访客进入 ========== -->
+        <div class="section" id="visitorEnter">
+            <div class="form-group">
+                <label>访客姓名 <span class="text-danger">*</span></label>
+                <input type="text" id="veName" class="form-control" placeholder="请输入您的姓名">
+            </div>
+            <div class="form-group">
+                <label>身份证号</label>
+                <input type="text" id="veIdCard" class="form-control" placeholder="可选填">
+            </div>
+            <div class="form-group">
+                <label>手机号</label>
+                <input type="text" id="vePhone" class="form-control" placeholder="可选填">
+            </div>
+
+            <button class="btn btn-gate" id="visitorRegisterBtn" onclick="visitorRegister()">📋 登记并获取密码</button>
+
+            <!-- 临时密码显示区 -->
+            <div class="temp-pwd-box" id="tempPwdBox">
+                <div class="pwd-label">您的临时门禁密码（请妥善保管）</div>
+                <div class="pwd-value" id="tempPwdDisplay">-</div>
+            </div>
+
+            <div style="margin-top:15px;">
+                <button class="btn btn-gate" onclick="visitorEnter()" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">🔓 使用临时密码开门</button>
+            </div>
+        </div>
+
+        <!-- ========== 访客离开 ========== -->
+        <div class="section" id="visitorLeave">
+            <div class="form-group">
+                <label>临时密码</label>
+                <input type="text" id="vlTempPwd" class="form-control" placeholder="请输入系统生成的临时密码">
+            </div>
+            <button class="btn btn-leave" onclick="visitorLeave()">🔒 验证并离开</button>
+        </div>
+
+        <!-- 结果提示 -->
+        <div class="result-box" id="resultBox"></div>
+
+        <div class="back-link"><a href="../index.html">← 返回首页</a></div>
     </div>
-    <div class="row mb-3">
-        <div class="col-2">来访事由：</div>
-        <div class="col-4"><input type="text" id="vReason" class="form-control"></div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-2">系统生成密码：</div>
-        <div class="col-4"><input type="text" id="vTempPwd" class="form-control" readonly></div>
-    </div>
-    <button id="genPwdBtn" class="btn btn-warning">生成密码并记录进入</button>
 </div>
-<button id="openDoor" class="btn btn-success">开门验证</button>
-<p id="tipMsg" class="mt-3 fs-5"></p>
 
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+<script src="../common/js/common.js"></script>
 <script>
-$("#identitySel").change(function(){
-    if($(this).val() == "0"){
-        $("#visitorDiv").show();
-        $("#gName, #gPwd").parent().parent().hide(); // 隐藏业主输入框
-    } else {
-        $("#visitorDiv").hide();
-        $("#gName, #gPwd").parent().parent().show(); // 显示业主输入框
-    }
-});
-$("#genPwdBtn").click(function(){
-    let params = new URLSearchParams();
-    params.append('name', $("#gName").val());
-    params.append('idCard', $("#vIdCard").val());
-    params.append('phone', $("#vPhone").val());
-    params.append('isOwner', '0');
-    params.append('action', 'enter');
+    let currentMode = 'owner';
+    let currentAction = 'enter';
 
-    axios.post("/gate/check", params, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).then(res=>{
-        let data = res.data;
-        if(data.code == 200){
-            $("#vTempPwd").val(data.tempPwd); // 后端返回生成的临时密码
-            alert("登记成功，请记住此密码开门！");
-        } else {
-            alert(data.msg);
-        }
-    }).catch(() => {
-        alert("网络错误，请稍后重试");
-    });
-});
-$("#openDoor").click(function(){
-    let isOwner = $("#identitySel").val();
-    let pwd = isOwner == "1" ? $("#gPwd").val() : $("#vTempPwd").val(); // 访客用生成的密码
-
-    if(!$("#gName").val()) {
-        $("#tipMsg").text("请输入姓名").css("color", "red");
-        return;
-    }
-    if(!pwd) {
-        $("#tipMsg").text(isOwner == "1" ? "请输入门禁密码" : "请先生成访客密码").css("color", "red");
-        return;
+    function switchMode(mode) {
+        currentMode = mode;
+        $('.mode-tab').removeClass('active');
+        $(event.target).addClass('active');
+        updateSections();
     }
 
-    let params = new URLSearchParams();
-    params.append('name', $("#gName").val());
-    params.append('pwd', pwd);
-    params.append('isOwner', isOwner);
-    params.append('action', 'enter');
+    function switchAction(action) {
+        currentAction = action;
+        $('.action-tab').removeClass('active');
+        $(event.target).addClass('active');
+        updateSections();
+    }
 
-    axios.post("/gate/check", params, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).then(res=>{
-        let data = res.data;
-        if(data.code == 200){
-            $("#tipMsg").text("✅ " + data.msg).css("color", "green");
-            alert(data.msg);
-        } else if(data.code == 502) {
-            $("#tipMsg").text("⚠️ " + data.msg).css("color", "orange");
-            alert(data.msg);
-        } else {
-            $("#tipMsg").text("❌ " + data.msg).css("color", "red");
-            alert(data.msg);
-        }
-    }).catch(() => {
-        $("#tipMsg").text("❌ 网络错误，请稍后重试").css("color", "red");
-    });
-});
+    function updateSections() {
+        $('.section').removeClass('active');
+        $('#resultBox').hide();
+        if(currentMode === 'owner' && currentAction === 'enter') $('#ownerEnter').addClass('active');
+        else if(currentMode === 'owner' && currentAction === 'leave') $('#ownerLeave').addClass('active');
+        else if(currentMode === 'visitor' && currentAction === 'enter') $('#visitorEnter').addClass('active');
+        else if(currentMode === 'visitor' && currentAction === 'leave') $('#visitorLeave').addClass('active');
+    }
+
+    function showResult(type, msg) {
+        let box = $('#resultBox');
+        box.removeClass('result-success result-error result-warn');
+        if(type === 'success') box.addClass('result-success');
+        else if(type === 'error') box.addClass('result-error');
+        else box.addClass('result-warn');
+        box.text(msg).show();
+    }
+
+    // 业主进入
+    function ownerEnter() {
+        let name = $('#oeName').val().trim();
+        let pwd = $('#oePwd').val().trim();
+        if(!name || !pwd) { showResult('error', '请输入姓名和密码'); return; }
+
+        let params = new URLSearchParams();
+        params.append('name', name);
+        params.append('pwd', pwd);
+        params.append('isOwner', '1');
+        params.append('action', 'enter');
+
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, validateStatus: function(s){return s<500;} })
+        .then(res => {
+            let data = res.data;
+            if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else if(data.code == 502) showResult('warn', '⚠️ ' + data.msg);
+            else showResult('error', '❌ ' + (data.msg || '验证失败'));
+        }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
+    }
+
+    // 业主离开
+    function ownerLeave() {
+        let name = $('#olName').val().trim();
+        let pwd = $('#olPwd').val().trim();
+        if(!name || !pwd) { showResult('error', '请输入姓名和密码'); return; }
+
+        let params = new URLSearchParams();
+        params.append('name', name);
+        params.append('pwd', pwd);
+        params.append('isOwner', '1');
+        params.append('action', 'leave');
+
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(res => {
+            let data = res.data;
+            if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else showResult('error', '❌ ' + data.msg);
+        }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
+    }
+
+    // 访客登记
+    function visitorRegister() {
+        let name = $('#veName').val().trim();
+        if(!name) { showResult('error', '请输入访客姓名'); return; }
+
+        let params = new URLSearchParams();
+        params.append('name', name);
+        params.append('idCard', $('#veIdCard').val().trim());
+        params.append('phone', $('#vePhone').val().trim());
+        params.append('action', 'visitorRegister');
+
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(res => {
+            let data = res.data;
+            if(data.code == 200) {
+                $('#tempPwdDisplay').text(data.tempPwd);
+                $('#tempPwdBox').show();
+                showResult('success', '✅ ' + data.msg);
+            } else {
+                showResult('error', '❌ ' + data.msg);
+            }
+        }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
+    }
+
+    // 访客用临时密码进门
+    function visitorEnter() {
+        let name = $('#veName').val().trim();
+        let tempPwd = $('#tempPwdDisplay').text();
+        if(!name) { showResult('error', '请输入姓名'); return; }
+        if(tempPwd === '-' || !tempPwd) { showResult('error', '请先登记获取临时密码'); return; }
+
+        let params = new URLSearchParams();
+        params.append('name', name);
+        params.append('tempPwd', tempPwd);
+        params.append('isOwner', '0');
+        params.append('action', 'enter');
+
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(res => {
+            let data = res.data;
+            if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else showResult('error', '❌ ' + data.msg);
+        }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
+    }
+
+    // 访客离开
+    function visitorLeave() {
+        let tempPwd = $('#vlTempPwd').val().trim();
+        if(!tempPwd) { showResult('error', '请输入临时密码'); return; }
+
+        let params = new URLSearchParams();
+        params.append('tempPwd', tempPwd);
+        params.append('isOwner', '0');
+        params.append('action', 'leave');
+
+        axios.post('/gate/check', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .then(res => {
+            let data = res.data;
+            if(data.code == 200) showResult('success', '✅ ' + data.msg);
+            else showResult('error', '❌ ' + data.msg);
+        }).catch(err => { showResult('error', '连接失败: ' + (err.message || '请检查服务器')); });
+    }
 </script>
 </body>
 </html>

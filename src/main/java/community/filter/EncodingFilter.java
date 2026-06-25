@@ -28,8 +28,8 @@ public class EncodingFilter implements Filter {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        // 3. 设置响应给前端浏览器的 Content-Type (防止前端 HTML 页面中文乱码)
-        resp.setContentType("text/html;charset=UTF-8");
+        // 3. 不在这里设置 Content-Type，由各个 Servlet 自行设置
+        //    AJAX 接口需要 application/json，HTML 页面需要 text/html
 
         // 4. 放行请求，让请求继续往下走（到达具体的 Servlet）
         chain.doFilter(req, resp);

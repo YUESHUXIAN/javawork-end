@@ -79,4 +79,11 @@ public class AccessRecordDAO {
         if (val == null) return false;
         return ((Number)val).longValue() > 0;
     }
+
+    // 4. 根据临时密码查找未离开的访客姓名
+    public String findVisitorNameByTempPwd(String tempPwd) {
+        String sql = "SELECT name FROM access_record WHERE temp_pwd=? AND leave_time IS NULL ORDER BY enter_time DESC LIMIT 1";
+        Object val = DBUtil.queryValue(sql, tempPwd);
+        return val != null ? val.toString() : null;
+    }
 }

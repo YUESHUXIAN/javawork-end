@@ -9,6 +9,10 @@ public class OwnerApply {
     private String newPwd;
     private Timestamp applyTime;
     private Integer status;
+    // 关联查询字段
+    private String ownerName;
+    private String ownerIdCard;
+    private Integer ownerBuildId;
     public Integer getId() {return id;}
     public void setId(Integer id) {this.id = id;}
     public Integer getOwnerId() {return ownerId;}
@@ -23,4 +27,10 @@ public class OwnerApply {
     public void setApplyTime(Timestamp applyTime) {this.applyTime = applyTime;}
     public Integer getStatus() {return status;}
     public void setStatus(Integer status) {this.status = status;}
+    public String getOwnerName() {return ownerName;}
+    public void setOwnerName(String ownerName) {this.ownerName = ownerName;}
+    public String getOwnerIdCard() {return ownerIdCard;}
+    public void setOwnerIdCard(String ownerIdCard) {this.ownerIdCard = ownerIdCard;}
+    public Integer getOwnerBuildId() {return ownerBuildId;}
+    public void setOwnerBuildId(Integer ownerBuildId) {this.ownerBuildId = ownerBuildId;}
 }

@@ -1,61 +1,291 @@
-/* common.css - 项目通用样式 */
+/* common.css - 智慧小区管理系统通用样式 */
 
 /* 1. 全局基础设置 */
-body {
-    background-image: url('/images/3.png');
-
-        /* 2. 让背景图完全覆盖整个屏幕，不留白边 */
-        background-size: cover;
-
-        /* 3. 图片居中显示 */
-        background-position: center center;
-
-        /* 4. 防止图片跟随页面滚动条滚动（固定在屏幕上） */
-        background-attachment: fixed;
-
-        /* 5. 设置原有字体不变 */
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+* {
+    box-sizing: border-box;
 }
-/* 2. 主容器样式（卡片效果） */
-.container {
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* 2. 主容器卡片样式 */
+.main-container {
     background-color: #ffffff;
     padding: 30px;
-    border-radius: 8px; /* 圆角 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* 轻微的阴影，产生立体感 */
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     margin-top: 30px;
     margin-bottom: 30px;
     max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInUp 0.4s ease-out;
 }
 
-/* 3. 页面标题样式 (加左侧蓝色边框) */
-h3.page-title, h3 {
-    border-left: 4px solid #007bff; /* 蓝色竖条 */
-    padding-left: 12px;
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. 页面标题样式 */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 25px;
-    font-weight: 600;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.page-header h3 {
+    margin: 0;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 22px;
+}
+
+.page-header h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 22px;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 2px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* 4. 表格美化 */
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    padding: 12px 15px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.table tbody td {
+    padding: 10px 15px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f6ff;
+}
+
+/* 5. 按钮样式 */
+.btn {
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    margin-right: 5px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a6fd6, #6a4192);
+    color: #fff;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: #fff;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #3ad46e, #2ee0c4);
+    color: #fff;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #fff;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    color: #fff;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #f5576c, #ff6a88);
+    color: #fff;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* 6. 输入框样式 */
+.form-control {
+    border-radius: 6px;
+    border: 1.5px solid #e0e0e0;
+    padding: 10px 14px;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* 7. Badge 样式 */
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.badge-success {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: #fff;
+}
+
+.badge-warning {
+    background: linear-gradient(135deg, #f6d365, #fda085);
     color: #333;
 }
 
-/* 4. 表格表头美化 */
-.table thead th {
-    background-color: #e9ecef;
-    border-bottom: 2px solid #dee2e6;
+.badge-info {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #fff;
 }
 
-/* 5. 统一按钮间距 */
-.btn {
-    margin-right: 5px;
-    border-radius: 4px;
+.badge-danger {
+    background: linear-gradient(135deg, #f5576c, #ff6a88);
+    color: #fff;
 }
 
-/* 6. 输入框聚焦时的样式优化 */
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+/* 8. Modal 样式 */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
-/* 7. 表格操作列按钮间距 */
+.modal-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-radius: 12px 12px 0 0;
+    padding: 18px 24px;
+}
+
+.modal-header .close {
+    color: #fff;
+    opacity: 0.8;
+    text-shadow: none;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 16px 24px;
+}
+
+/* 9. 搜索区域 */
+.search-bar {
+    background: #f8f9ff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e8e8ff;
+}
+
+.search-bar label {
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* 10. 空状态提示 */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.empty-state .icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+/* 11. 操作按钮组 */
 .action-btn {
     margin-right: 5px;
     font-size: 0.85rem;
+    padding: 5px 12px;
+}
+
+/* 12. 登录页面特殊样式 */
+.login-card {
+    max-width: 420px;
+    margin: 80px auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.login-card h3::before {
+    display: none;
+}
+
+/* 13. 响应式 */
+@media (max-width: 768px) {
+    .main-container {
+        margin: 15px;
+        padding: 20px;
+    }
+    .page-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .login-card {
+        margin: 30px 15px;
+        padding: 25px;
+    }
 }

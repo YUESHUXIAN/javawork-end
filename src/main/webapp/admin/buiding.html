@@ -2,33 +2,44 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>小区楼宇管理</title>
-    <!-- 使用在线CDN的 Bootstrap 样式 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>楼宇管理 - 智慧小区</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; }
-        .container { background: #fff; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .action-btn { margin-right: 5px; }
-    </style>
+    <link rel="stylesheet" href="../common/css/common.css">
 </head>
 <body>
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg" style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 12px 0;">
+    <div class="container-fluid" style="max-width:1200px;">
+        <a class="navbar-brand text-white font-weight-bold" href="#">🏘️ 智慧小区管理后台</a>
+        <div class="navbar-nav ml-auto">
+            <a class="nav-link text-white-50" href="records.html">📊 进出记录</a>
+            <a class="nav-link text-white font-weight-bold" href="buiding.html">🏢 楼宇管理</a>
+            <a class="nav-link text-white-50" href="owner.html">👥 业主管理</a>
+            <a class="nav-link text-white-50" href="applyList.html">📋 申请审核</a>
+            <a class="nav-link text-white-50" href="index.html">🚪 退出</a>
+        </div>
+    </div>
+</nav>
+
+<div class="main-container">
+    <div class="page-header">
         <h3>楼宇信息管理</h3>
         <button class="btn btn-primary" data-toggle="modal" data-target="#buildingModal" onclick="openAddModal()">+ 新增楼宇</button>
     </div>
 
-    <table class="table table-bordered table-hover">
-        <thead class="thead-light">
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <th>ID</th>
+            <th width="80">ID</th>
             <th>楼宇名称</th>
             <th>楼宇编号</th>
-            <th>操作</th>
+            <th width="180">操作</th>
         </tr>
         </thead>
         <tbody id="tableBody">
-        <!-- 数据由 JS 渲染 -->
+        <tr><td colspan="4" class="text-center text-muted py-4">加载中...</td></tr>
         </tbody>
     </table>
 </div>
@@ -44,12 +55,12 @@
             <div class="modal-body">
                 <input type="hidden" id="editId">
                 <div class="form-group">
-                    <label>楼宇名称：</label>
+                    <label>楼宇名称</label>
                     <input type="text" id="buildName" class="form-control" placeholder="例如：A栋">
                 </div>
                 <div class="form-group">
-                    <label>楼宇编号：</label>
-                    <input type="text" id="buildNo" class="form-control" placeholder="例如：A-001 (需唯一)">
+                    <label>楼宇编号 <small class="text-muted">（需唯一）</small></label>
+                    <input type="text" id="buildNo" class="form-control" placeholder="例如：A-001">
                 </div>
             </div>
             <div class="modal-footer">
@@ -60,46 +71,44 @@
     </div>
 </div>
 
-<!-- 引入在线 jQuery 和 Axios -->
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
-<!-- 引入 Bootstrap JS (依赖于 jQuery) -->
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
-
+<script src="../common/js/common.js"></script>
 <script>
+    checkAdminLogin(); // 登录拦截
+
     const API_URL = '/admin/building';
 
-    $(document).ready(function() {
-        loadBuildings();
-    });
+    $(document).ready(function() { loadBuildings(); });
 
     function loadBuildings() {
         axios.get(API_URL, { params: { action: 'list' } }).then(res => {
             let data = res.data;
-            // 检查是否返回401未登录
-            if(data.code === 401) {
-                alert(data.msg);
-                window.location.href = 'index.html';
+            if(data.code === 401) { alert(data.msg); window.location.href = 'index.html'; return; }
+            let list = data;
+            if(list.length === 0) {
+                $('#tableBody').html('<tr><td colspan="4" class="text-center text-muted py-4">暂无楼宇数据，请点击上方按钮新增</td></tr>');
                 return;
             }
-            let list = data;
             let html = '';
             list.forEach(item => {
                 html += `<tr>
-                            <td>${item.id}</td>
-                            <td>${item.buildName}</td>
-                            <td>${item.buildNo}</td>
-                            <td>
-                                <button class="btn btn-sm btn-warning action-btn" onclick="openEditModal(${item.id}, '${item.buildName}', '${item.buildNo}')">修改</button>
-                                <button class="btn btn-sm btn-danger action-btn" onclick="deleteBuilding(${item.id})">删除</button>
-                            </td>
-                         </tr>`;
+                    <td>${item.id}</td>
+                    <td><strong>${item.buildName}</strong></td>
+                    <td><code>${item.buildNo}</code></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning action-btn" onclick="openEditModal(${item.id}, '${item.buildName}', '${item.buildNo}')">✏️ 修改</button>
+                        <button class="btn btn-sm btn-danger action-btn" onclick="deleteBuilding(${item.id})">🗑️ 删除</button>
+                    </td>
+                </tr>`;
             });
             $('#tableBody').html(html);
-        }).catch(err => alert('加载列表失败！'));
+        }).catch(() => {
+            $('#tableBody').html('<tr><td colspan="4" class="text-center text-danger py-4">加载失败，请检查网络</td></tr>');
+        });
     }
 
-    // 2. 打开新增弹窗
     function openAddModal() {
         $('#modalTitle').text('新增楼宇');
         $('#editId').val('');
@@ -107,7 +116,6 @@
         $('#buildNo').val('');
     }
 
-    // 3. 打开修改弹窗
     function openEditModal(id, name, no) {
         $('#modalTitle').text('修改楼宇');
         $('#editId').val(id);
@@ -116,11 +124,10 @@
         $('#buildingModal').modal('show');
     }
 
-    // 4. 提交新增/修改
     function submitBuilding() {
         let id = $('#editId').val();
-        let name = $('#buildName').val();
-        let no = $('#buildNo').val();
+        let name = $('#buildName').val().trim();
+        let no = $('#buildNo').val().trim();
         if(!name || !no) { alert('请填写完整信息'); return; }
 
         let params = new URLSearchParams();
@@ -130,47 +137,30 @@
         params.append('buildNo', no);
 
         axios.post(API_URL, params).then(res => {
-            let data = res.data; // 假设后端返回 JSON {code: 200, msg: '...'}
-            if(data.code === 401) {
-                alert(data.msg);
-                window.location.href = 'index.html';
-                return;
-            }
+            let data = res.data;
+            if(data.code === 401) { alert(data.msg); window.location.href = 'index.html'; return; }
             if(data.code === 200) {
                 alert(data.msg);
                 $('#buildingModal').modal('hide');
-                loadBuildings(); // 刷新列表
+                loadBuildings();
             } else {
-                alert(data.msg); // 显示”楼宇编号已存在”
+                alert(data.msg);
             }
-        }).catch(() => {
-            alert(“网络错误，请稍后重试”);
-        });
+        }).catch(() => { alert("网络错误，请稍后重试"); });
     }
 
-    // 5. 删除
     function deleteBuilding(id) {
-        if(!confirm('确定要删除这条记录吗？')) return;
+        if(!confirm('确定要删除这条楼宇记录吗？')) return;
         let params = new URLSearchParams();
         params.append('action', 'delete');
         params.append('id', id);
 
         axios.post(API_URL, params).then(res => {
             let data = res.data;
-            if(data.code === 401) {
-                alert(data.msg);
-                window.location.href = 'index.html';
-                return;
-            }
-            if(data.code === 200) {
-                alert(data.msg);
-                loadBuildings();
-            } else {
-                alert(data.msg);
-            }
-        }).catch(() => {
-            alert("网络错误，请稍后重试");
-        });
+            if(data.code === 401) { alert(data.msg); window.location.href = 'index.html'; return; }
+            if(data.code === 200) { alert(data.msg); loadBuildings(); }
+            else { alert(data.msg); }
+        }).catch(() => { alert("网络错误，请稍后重试"); });
     }
 </script>
 </body>

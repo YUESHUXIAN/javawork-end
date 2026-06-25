@@ -2,46 +2,52 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>业主服务中心</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业主服务中心 - 智慧小区</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
     <style>
-        .owner-wrapper { margin-top: 50px; }
-        .menu-card {
-            transition: transform 0.2s;
-            cursor: pointer;
-            background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            text-align: center; height: 100%;
+        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .owner-card {
+            max-width: 520px; width: 90%; padding: 50px 40px; background: #fff;
+            border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center; animation: fadeInUp 0.5s ease-out;
         }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .menu-icon { font-size: 40px; display: block; margin-bottom: 15px; color: #007bff; }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .owner-icon { font-size: 56px; margin-bottom: 15px; }
+        .owner-title { font-size: 24px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .owner-sub { color: #8e99a4; margin-bottom: 35px; font-size: 14px; }
+        .menu-btn {
+            display: block; width: 85%; padding: 16px; margin: 12px auto; border-radius: 12px;
+            font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.3s;
+            border: none; cursor: pointer;
+        }
+        .menu-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); text-decoration: none; }
+        .btn-verify {
+            background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff;
+        }
+        .btn-profile {
+            background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff;
+        }
+        .divider { height: 1px; background: #e8e8e8; margin: 25px 0; }
+        .back-link { margin-top: 20px; }
+        .back-link a { color: #667eea; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
-<div class="container owner-wrapper">
-    <h3>🏠 业主服务中心</h3>
-    <hr>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <a href="profile.html" style="text-decoration: none; color: inherit;">
-                <div class="menu-card">
-                    <span class="menu-icon">👤</span>
-                    <h5>个人信息</h5>
-                    <p class="text-muted">查看您的姓名、身份证、房号及审核状态</p>
-                </div>
-            </a>
-        </div>
-        <div class="col-md-6 mb-4">
-            <a href="verify.html" style="text-decoration: none; color: inherit;">
-                <div class="menu-card">
-                    <span class="menu-icon">📝</span>
-                    <h5>信息修改申请</h5>
-                    <p class="text-muted">核验身份后，修改您的手机号、房间号或密码</p>
-                </div>
-            </a>
-        </div>
-    </div>
+
+<div class="owner-card">
+    <div class="owner-icon">👤</div>
+    <div class="owner-title">业主服务中心</div>
+    <div class="owner-sub">请先进行身份核验，再查看或修改个人信息</div>
+
+    <a href="verify.html" class="menu-btn btn-verify">📝 &nbsp;身份核验 / 信息修改申请</a>
+    <a href="profile.html" class="menu-btn btn-profile">📋 &nbsp;查看个人信息</a>
+
+    <div class="divider"></div>
+    <div class="back-link"><a href="../index.html">← 返回首页</a></div>
 </div>
+
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -84,6 +84,12 @@ public class OwnerDAO {
         DBUtil.update(sql, newPhone, newRoom, newPwd, ownerId);
     }
 
+    // 管理员修改业主基本信息（姓名、身份证、楼宇）
+    public void updateOwner(Integer id, String name, String idCard, Integer buildId) {
+        String sql = "UPDATE owner SET name=?, id_card=?, build_id=? WHERE id=?";
+        DBUtil.update(sql, name, idCard, buildId, id);
+    }
+
     // 4. 管理员删除业主
     public void deleteOwner(Integer id) {
         String sql = "DELETE FROM owner WHERE id = ?";

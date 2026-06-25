@@ -2,8 +2,10 @@ package community.servlet;
 
 import community.DAO.OwnerApplyDAO;
 import community.DAO.OwnerDAO;
+import community.DAO.BuildingDAO;
 import community.entity.Owner;
 import community.entity.OwnerApply;
+import community.entity.Building;
 import community.utils.JsonUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,6 +20,7 @@ import java.util.List;
 public class OwnerServlet extends HttpServlet {
     private OwnerDAO ownerDAO = new OwnerDAO();
     private OwnerApplyDAO applyDAO = new OwnerApplyDAO();
+    private BuildingDAO buildingDAO = new BuildingDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,8 +38,11 @@ public class OwnerServlet extends HttpServlet {
             List<Owner> owners = ownerDAO.getAllOwners();
             resp.getWriter().write(JsonUtil.toJson(owners));
         } else if ("applyList".equals(action)) {
-            List<OwnerApply> applies = applyDAO.getAllApplies(); // 需在ApplyDAO中补充此方法
+            List<OwnerApply> applies = applyDAO.getAllAppliesWithOwnerInfo();
             resp.getWriter().write(JsonUtil.toJson(applies));
+        } else if ("buildingList".equals(action)) {
+            List<Building> buildings = buildingDAO.getAllBuildings();
+            resp.getWriter().write(JsonUtil.toJson(buildings));
         }
     }
 
@@ -55,12 +61,20 @@ public class OwnerServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if ("addInit".equals(action)) {
-            // 管理员初始化新增
+            // 管理员初始化新增业主（只填姓名、身份证、楼宇）
             String name = req.getParameter("name");
             String idCard = req.getParameter("idCard");
             int buildId = Integer.parseInt(req.getParameter("buildId"));
             ownerDAO.addInitOwner(name, idCard, buildId);
-            resp.getWriter().write("{\"code\":200,\"msg\":\"初始化成功\"}");
+            resp.getWriter().write("{\"code\":200,\"msg\":\"初始化成功，默认密码为123456\"}");
+        } else if ("update".equals(action)) {
+            // 管理员修改业主信息
+            int id = Integer.parseInt(req.getParameter("id"));
+            String name = req.getParameter("name");
+            String idCard = req.getParameter("idCard");
+            int buildId = Integer.parseInt(req.getParameter("buildId"));
+            ownerDAO.updateOwner(id, name, idCard, buildId);
+            resp.getWriter().write("{\"code\":200,\"msg\":\"修改成功\"}");
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(req.getParameter("id"));
             ownerDAO.deleteOwner(id);
@@ -68,15 +82,19 @@ public class OwnerServlet extends HttpServlet {
         } else if ("approveApply".equals(action)) {
             // 管理员审批修改申请
             int applyId = Integer.parseInt(req.getParameter("applyId"));
-            // 先查申请详情
             OwnerApply apply = applyDAO.getApplyById(applyId);
-            if(apply != null){
+            if (apply != null) {
                 ownerDAO.updateOwnerInfo(apply.getOwnerId(), apply.getNewPhone(), apply.getNewRoom(), apply.getNewPwd());
                 applyDAO.updateStatus(applyId, 1); // 标记为已审批
                 resp.getWriter().write("{\"code\":200,\"msg\":\"审核通过，业主信息已更新\"}");
             } else {
                 resp.getWriter().write("{\"code\":500,\"msg\":\"申请不存在\"}");
             }
+        } else if ("rejectApply".equals(action)) {
+            // 管理员拒绝修改申请
+            int applyId = Integer.parseInt(req.getParameter("applyId"));
+            applyDAO.updateStatus(applyId, 2); // 2=已拒绝
+            resp.getWriter().write("{\"code\":200,\"msg\":\"已拒绝该申请\"}");
         }
     }
 }
