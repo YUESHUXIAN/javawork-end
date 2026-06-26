@@ -7,7 +7,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f5f5f5;
     min-height: 100vh;
     color: #333;
     margin: 0;
@@ -55,7 +55,7 @@ body {
     display: inline-block;
     width: 4px;
     height: 22px;
-    background: linear-gradient(180deg, #667eea, #764ba2);
+    background: #333;
     border-radius: 2px;
     margin-right: 10px;
     vertical-align: middle;
@@ -69,7 +69,7 @@ body {
 }
 
 .table thead th {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #1a1a1a;
     color: #fff;
     border: none;
     padding: 12px 15px;
@@ -84,62 +84,107 @@ body {
 }
 
 .table-hover tbody tr:hover {
-    background-color: #f8f6ff;
+    background-color: #f5f5f5;
 }
 
-/* 5. 按钮样式 */
+/* 5. 按钮样式 + 动态效果 */
 .btn {
-    border-radius: 6px;
-    padding: 8px 16px;
+    border-radius: 50px;
+    padding: 8px 20px;
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     border: none;
     margin-right: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+}
+
+.btn:hover::after {
+    width: 300px;
+    height: 300px;
 }
 
 .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #1a1a1a;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #5a6fd6, #6a4192);
+    background: #333;
     color: #fff;
 }
 
 .btn-success {
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    background: #43e97b;
     color: #fff;
 }
 
 .btn-success:hover {
-    background: linear-gradient(135deg, #3ad46e, #2ee0c4);
+    background: #3ad46e;
     color: #fff;
 }
 
 .btn-info {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    background: #4facfe;
+    color: #fff;
+}
+
+.btn-info:hover {
+    background: #3d9aec;
     color: #fff;
 }
 
 .btn-warning {
-    background: linear-gradient(135deg, #f6d365, #fda085);
-    color: #fff;
+    background: #f6d365;
+    color: #333;
+}
+
+.btn-warning:hover {
+    background: #e8c554;
+    color: #333;
 }
 
 .btn-danger {
-    background: linear-gradient(135deg, #f5576c, #ff6a88);
+    background: #f5576c;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background: #e0465b;
     color: #fff;
 }
 
 .btn-secondary {
     background: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
     color: #fff;
 }
 
@@ -152,8 +197,8 @@ body {
 }
 
 .form-control:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 /* 7. Badge 样式 */
@@ -165,22 +210,22 @@ body {
 }
 
 .badge-success {
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    background: #22c55e;
     color: #fff;
 }
 
 .badge-warning {
-    background: linear-gradient(135deg, #f6d365, #fda085);
-    color: #333;
+    background: #f59e0b;
+    color: #111;
 }
 
 .badge-info {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    background: #64748b;
     color: #fff;
 }
 
 .badge-danger {
-    background: linear-gradient(135deg, #f5576c, #ff6a88);
+    background: #ef4444;
     color: #fff;
 }
 
@@ -192,7 +237,7 @@ body {
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #1a1a1a;
     color: #fff;
     border-radius: 12px 12px 0 0;
     padding: 18px 24px;
@@ -219,11 +264,11 @@ body {
 
 /* 9. 搜索区域 */
 .search-bar {
-    background: #f8f9ff;
+    background: #fafafa;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    border: 1px solid #e8e8ff;
+    border: 1px solid #e0e0e0;
 }
 
 .search-bar label {
@@ -250,9 +295,35 @@ body {
     margin-right: 5px;
     font-size: 0.85rem;
     padding: 5px 12px;
+    border-radius: 50px;
 }
 
-/* 12. 登录页面特殊样式 */
+/* 12. 管理后台导航栏 - 黑色主题 */
+.admin-navbar {
+    background: #1a1a1a !important;
+    padding: 12px 0;
+}
+
+.admin-navbar .navbar-brand {
+    color: #fff !important;
+    font-weight: 700;
+}
+
+.admin-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.5) !important;
+    transition: color 0.3s ease;
+}
+
+.admin-navbar .nav-link.active-page {
+    color: #fff !important;
+    font-weight: 700;
+}
+
+.admin-navbar .nav-link:hover {
+    color: #fff !important;
+}
+
+/* 13. 登录页面特殊样式 */
 .login-card {
     max-width: 420px;
     margin: 80px auto;
@@ -273,152 +344,7 @@ body {
     display: none;
 }
 
-/* 13. 响应式 */
-@media (max-width: 768px) {
-    .main-container {
-        margin: 15px;
-        padding: 20px;
-    }
-    .page-header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-    }
-    .login-card {
-        margin: 30px 15px;
-        padding: 25px;
-    }
-}
-
-/* ============================================================
-   以下为公共组件样式（从各页面内联 style 提取）
-   ============================================================ */
-
-/* 14. 着陆页/入口页居中布局 */
-.landing-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-}
-
-.landing-card {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 50px 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 460px;
-    width: 90%;
-    animation: fadeInUp 0.6s ease-out;
-}
-
-.landing-icon {
-    font-size: 56px;
-    margin-bottom: 15px;
-}
-
-.landing-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 8px;
-}
-
-.landing-sub {
-    color: #8e99a4;
-    margin-bottom: 35px;
-    font-size: 14px;
-}
-
-.landing-divider {
-    height: 1px;
-    background: #e8e8e8;
-    margin: 25px 0;
-}
-
-.landing-footer {
-    color: #aaa;
-    font-size: 12px;
-    margin-top: 20px;
-}
-
-/* 着陆页按钮（全宽胶囊形） */
-.landing-card .btn-landing {
-    width: 85%;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: 600;
-    margin: 10px auto;
-    border-radius: 50px;
-    display: block;
-    transition: all 0.3s ease;
-    border: none;
-    color: #fff;
-    text-decoration: none;
-}
-
-.landing-card .btn-landing:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    color: #fff;
-    text-decoration: none;
-}
-
-.btn-landing-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-}
-
-.btn-landing-success {
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
-}
-
-.btn-landing-info {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
-}
-
-/* 15. 表单页卡片（登录、核验、个人信息等居中表单页） */
-.form-page-body {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 40px 15px;
-}
-
-.form-card {
-    max-width: 500px;
-    width: 100%;
-    padding: 35px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    animation: fadeInUp 0.5s ease-out;
-}
-
-.form-card-icon {
-    font-size: 42px;
-    text-align: center;
-    margin-bottom: 8px;
-}
-
-.form-card-title {
-    text-align: center;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 25px;
-    font-size: 20px;
-}
-
-.form-card .form-group label {
-    font-weight: 500;
-    color: #555;
-    font-size: 14px;
-}
-
-/* 胶囊形全宽提交按钮 */
+/* 14. 胶囊按钮（origin-btn 风格） */
 .btn-pill {
     border: none;
     border-radius: 50px;
@@ -427,92 +353,65 @@ body {
     font-weight: 600;
     width: 100%;
     color: #fff;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-pill::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+}
+
+.btn-pill:hover::after {
+    width: 400px;
+    height: 400px;
 }
 
 .btn-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
     color: #fff;
 }
 
-.btn-pill-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+.btn-pill:active {
+    transform: translateY(0);
 }
 
-.btn-pill-primary:hover {
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    color: #fff;
-}
+.btn-pill-primary { background: #1a1a1a; }
+.btn-pill-success { background: #43e97b; }
+.btn-pill-info { background: #4facfe; }
+.btn-pill-danger { background: #f5576c; }
 
-.btn-pill-success {
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
-}
-
-.btn-pill-success:hover {
-    box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
-    color: #fff;
-}
-
-.btn-pill-info {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
-}
-
-.btn-pill-info:hover {
-    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
-    color: #fff;
-}
-
-.btn-pill-danger {
-    background: linear-gradient(135deg, #f5576c, #ff6a88);
-}
-
-.btn-pill-danger:hover {
-    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
-    color: #fff;
-}
-
-/* 16. 管理后台导航栏 */
-.admin-navbar {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    padding: 12px 0;
-}
-
-.admin-navbar .navbar-brand {
-    color: #fff;
-    font-weight: 700;
-}
-
-.admin-navbar .nav-link {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.admin-navbar .nav-link.active-page {
-    color: #fff;
-    font-weight: 700;
-}
-
-.admin-navbar .nav-link:hover {
-    color: #fff;
-}
-
-/* 17. 返回链接 */
+/* 15. 返回链接 */
 .back-link {
     text-align: center;
     margin-top: 20px;
 }
 
 .back-link a {
-    color: #667eea;
+    color: #333;
     text-decoration: none;
     font-size: 14px;
+    transition: color 0.2s;
 }
 
 .back-link a:hover {
+    color: #000;
     text-decoration: underline;
 }
 
-/* 18. 步骤标签 */
+/* 16. 步骤标签 */
 .step-label {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #1a1a1a;
     color: #fff;
     padding: 6px 14px;
     border-radius: 20px;
@@ -522,7 +421,7 @@ body {
     margin-bottom: 15px;
 }
 
-/* 19. 信息展示行（个人信息页） */
+/* 17. 信息展示行（个人信息页） */
 .info-row {
     display: flex;
     padding: 12px 0;
@@ -543,9 +442,9 @@ body {
     font-size: 14px;
 }
 
-/* 20. 门禁终端组件 */
+/* 18. 门禁终端组件 */
 .gate-header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #1a1a1a;
     color: #fff;
     padding: 25px;
     text-align: center;
@@ -563,9 +462,7 @@ body {
     font-size: 13px;
 }
 
-.gate-body {
-    padding: 30px;
-}
+.gate-body { padding: 30px; }
 
 .gate-card {
     max-width: 520px;
@@ -577,7 +474,7 @@ body {
     animation: fadeInUp 0.5s ease-out;
 }
 
-/* 模式切换（业主/访客） */
+/* 模式切换 */
 .gate-mode-tabs {
     display: flex;
     border-radius: 10px;
@@ -600,11 +497,11 @@ body {
 }
 
 .gate-mode-tab.active {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: #1a1a1a;
     color: #fff;
 }
 
-/* 动作切换（进入/离开） */
+/* 动作切换 */
 .gate-action-tabs {
     display: flex;
     border-radius: 8px;
@@ -647,28 +544,14 @@ body {
     display: none;
 }
 
-.result-success {
-    background: #e8f8f0;
-    color: #27ae60;
-    border: 1px solid #a3e4c1;
-}
-
-.result-error {
-    background: #fde8e8;
-    color: #e74c3c;
-    border: 1px solid #f5a3a3;
-}
-
-.result-warn {
-    background: #fff8e1;
-    color: #f57f17;
-    border: 1px solid #ffe082;
-}
+.result-success { background: #e8f8f0; color: #27ae60; border: 1px solid #a3e4c1; }
+.result-error { background: #fde8e8; color: #e74c3c; border: 1px solid #f5a3a3; }
+.result-warn { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
 
 /* 临时密码展示框 */
 .temp-pwd-box {
-    background: #f0f0ff;
-    border: 2px dashed #667eea;
+    background: #f5f5f5;
+    border: 2px dashed #333;
     border-radius: 10px;
     padding: 15px;
     text-align: center;
@@ -676,41 +559,89 @@ body {
     display: none;
 }
 
-.temp-pwd-label {
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 5px;
-}
-
-.temp-pwd-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: #667eea;
-    letter-spacing: 3px;
-}
+.temp-pwd-label { font-size: 13px; color: #888; margin-bottom: 5px; }
+.temp-pwd-value { font-size: 28px; font-weight: 700; color: #333; letter-spacing: 3px; }
 
 /* 门禁页面内区块切换 */
-.gate-section {
-    display: none;
+.gate-section { display: none; }
+.gate-section.active { display: block; }
+
+/* 19. 着陆页 */
+.landing-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background: #f5f5f5;
 }
 
-.gate-section.active {
+.landing-card {
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 460px;
+    width: 90%;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.landing-icon { font-size: 56px; margin-bottom: 15px; }
+.landing-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+.landing-sub { color: #8e99a4; margin-bottom: 35px; font-size: 14px; }
+.landing-divider { height: 1px; background: #e8e8e8; margin: 25px 0; }
+.landing-footer { color: #aaa; font-size: 12px; margin-top: 20px; }
+
+.landing-card .btn-landing {
+    width: 85%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px auto;
+    border-radius: 50px;
     display: block;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
 }
 
-/* 21. 响应式补充 */
+.landing-card .btn-landing::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+}
+
+.landing-card .btn-landing:hover::after {
+    width: 400px;
+    height: 400px;
+}
+
+.landing-card .btn-landing:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-landing-primary { background: #1a1a1a; }
+.btn-landing-success { background: #43e97b; }
+.btn-landing-info { background: #4facfe; }
+
+/* 20. 响应式 */
 @media (max-width: 768px) {
-    .landing-card {
-        padding: 35px 25px;
-    }
-    .form-card {
-        padding: 25px 20px;
-    }
-    .info-row {
-        flex-direction: column;
-    }
-    .info-label {
-        width: auto;
-        margin-bottom: 4px;
-    }
+    .main-container { margin: 15px; padding: 20px; }
+    .page-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+    .login-card { margin: 30px 15px; padding: 25px; }
+    .landing-card { padding: 35px 25px; }
 }

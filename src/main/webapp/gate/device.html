@@ -7,13 +7,89 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
     <style>
-        .gate-page-body {
+        body {
             display: flex; align-items: flex-start; justify-content: center;
             min-height: 100vh; margin: 0; padding: 30px 15px;
         }
+        .gate-card {
+            max-width: 520px; width: 100%; background: #fff;
+            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            overflow: hidden; animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+        .gate-header {
+            background: #1a1a1a;
+            color: #fff; padding: 25px; text-align: center;
+        }
+        .gate-header h3 { margin: 0; font-weight: 700; font-size: 22px; }
+        .gate-header p { margin: 5px 0 0; opacity: 0.8; font-size: 13px; }
+
+        .gate-body { padding: 30px; }
+
+        /* 模式切换 */
+        .mode-tabs {
+            display: flex; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px;
+        }
+        .mode-tab {
+            flex: 1; padding: 12px; text-align: center; cursor: pointer;
+            font-weight: 600; font-size: 14px; transition: all 0.3s;
+            background: #f0f0f0; color: #666; border: none;
+        }
+        .mode-tab.active {
+            background: #1a1a1a; color: #fff;
+        }
+
+        /* 动作切换 */
+        .action-tabs {
+            display: flex; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px;
+        }
+        .action-tab {
+            flex: 1; padding: 10px; text-align: center; cursor: pointer;
+            font-weight: 500; font-size: 13px; transition: all 0.3s;
+            background: #f8f8f8; color: #888; border: none;
+        }
+        .action-tab.active { background: #43e97b; color: #fff; }
+        .action-tab.leave.active { background: #f5576c; color: #fff; }
+
+        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
+        .btn-gate {
+            background: #43e97b; color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600; width: 100%;
+        }
+        .btn-gate:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; }
+        .btn-leave {
+            background: #f5576c; color: #fff; border: none;
+            border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600; width: 100%;
+        }
+        .btn-leave:hover { box-shadow: 0 6px 20px rgba(245,87,108,0.4); color: #fff; }
+
+        .result-box {
+            margin-top: 20px; padding: 15px; border-radius: 10px;
+            text-align: center; font-size: 16px; font-weight: 600;
+            display: none;
+        }
+        .result-success { background: #e8f8f0; color: #27ae60; border: 1px solid #a3e4c1; }
+        .result-error { background: #fde8e8; color: #e74c3c; border: 1px solid #f5a3a3; }
+        .result-warn { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+
+        .temp-pwd-box {
+            background: #f0f0ff; border: 2px dashed #333; border-radius: 10px;
+            padding: 15px; text-align: center; margin-top: 15px; display: none;
+        }
+        .temp-pwd-box .pwd-label { font-size: 13px; color: #888; margin-bottom: 5px; }
+        .temp-pwd-box .pwd-value { font-size: 28px; font-weight: 700; color: #333; letter-spacing: 3px; }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #333; text-decoration: none; font-size: 13px; }
     </style>
 </head>
-<body class="gate-page-body">
+<body>
 
 <div class="gate-card">
     <div class="gate-header">
@@ -23,19 +99,19 @@
 
     <div class="gate-body">
         <!-- 身份选择 -->
-        <div class="gate-mode-tabs">
-            <button class="gate-mode-tab active" onclick="switchMode('owner', this)">👤 业主</button>
-            <button class="gate-mode-tab" onclick="switchMode('visitor', this)">🚶 访客</button>
+        <div class="mode-tabs">
+            <button class="mode-tab active" onclick="switchMode('owner')">👤 业主</button>
+            <button class="mode-tab" onclick="switchMode('visitor')">🚶 访客</button>
         </div>
 
         <!-- 进出选择 -->
-        <div class="gate-action-tabs">
-            <button class="gate-action-tab active" onclick="switchAction('enter', this)">🚪 进入小区</button>
-            <button class="gate-action-tab leave" onclick="switchAction('leave', this)">🚶 离开小区</button>
+        <div class="action-tabs">
+            <button class="action-tab active" onclick="switchAction('enter')">🚪 进入小区</button>
+            <button class="action-tab leave" onclick="switchAction('leave')">🚶 离开小区</button>
         </div>
 
         <!-- ========== 业主进入 ========== -->
-        <div class="gate-section active" id="ownerEnter">
+        <div class="section active" id="ownerEnter">
             <div class="form-group">
                 <label>业主姓名</label>
                 <input type="text" id="oeName" class="form-control" placeholder="请输入姓名">
@@ -44,11 +120,11 @@
                 <label>门禁密码</label>
                 <input type="password" id="oePwd" class="form-control" placeholder="请输入门禁密码">
             </div>
-            <button class="btn btn-pill btn-pill-success" onclick="ownerEnter()">🔓 验证并开门</button>
+            <button class="btn btn-gate" onclick="ownerEnter()">🔓 验证并开门</button>
         </div>
 
         <!-- ========== 业主离开 ========== -->
-        <div class="gate-section" id="ownerLeave">
+        <div class="section" id="ownerLeave">
             <div class="form-group">
                 <label>业主姓名</label>
                 <input type="text" id="olName" class="form-control" placeholder="请输入姓名">
@@ -57,11 +133,11 @@
                 <label>门禁密码</label>
                 <input type="password" id="olPwd" class="form-control" placeholder="请输入门禁密码">
             </div>
-            <button class="btn btn-pill btn-pill-danger" onclick="ownerLeave()">🔒 验证并离开</button>
+            <button class="btn btn-leave" onclick="ownerLeave()">🔒 验证并离开</button>
         </div>
 
         <!-- ========== 访客进入 ========== -->
-        <div class="gate-section" id="visitorEnter">
+        <div class="section" id="visitorEnter">
             <div class="form-group">
                 <label>访客姓名 <span class="text-danger">*</span></label>
                 <input type="text" id="veName" class="form-control" placeholder="请输入您的姓名">
@@ -75,26 +151,26 @@
                 <input type="text" id="vePhone" class="form-control" placeholder="可选填">
             </div>
 
-            <button class="btn btn-pill btn-pill-success" id="visitorRegisterBtn" onclick="visitorRegister()">📋 登记并获取密码</button>
+            <button class="btn btn-gate" id="visitorRegisterBtn" onclick="visitorRegister()">📋 登记并获取密码</button>
 
             <!-- 临时密码显示区 -->
             <div class="temp-pwd-box" id="tempPwdBox">
-                <div class="temp-pwd-label">您的临时门禁密码（请妥善保管）</div>
-                <div class="temp-pwd-value" id="tempPwdDisplay">-</div>
+                <div class="pwd-label">您的临时门禁密码（请妥善保管）</div>
+                <div class="pwd-value" id="tempPwdDisplay">-</div>
             </div>
 
             <div style="margin-top:15px;">
-                <button class="btn btn-pill btn-pill-info" onclick="visitorEnter()">🔓 使用临时密码开门</button>
+                <button class="btn btn-gate" onclick="visitorEnter()" style="background: #4facfe;">🔓 使用临时密码开门</button>
             </div>
         </div>
 
         <!-- ========== 访客离开 ========== -->
-        <div class="gate-section" id="visitorLeave">
+        <div class="section" id="visitorLeave">
             <div class="form-group">
                 <label>临时密码</label>
                 <input type="text" id="vlTempPwd" class="form-control" placeholder="请输入系统生成的临时密码">
             </div>
-            <button class="btn btn-pill btn-pill-danger" onclick="visitorLeave()">🔒 验证并离开</button>
+            <button class="btn btn-leave" onclick="visitorLeave()">🔒 验证并离开</button>
         </div>
 
         <!-- 结果提示 -->
@@ -112,22 +188,22 @@
     let currentMode = 'owner';
     let currentAction = 'enter';
 
-    function switchMode(mode, el) {
+    function switchMode(mode) {
         currentMode = mode;
-        $('.gate-mode-tab').removeClass('active');
-        $(el).addClass('active');
+        $('.mode-tab').removeClass('active');
+        $(event.target).addClass('active');
         updateSections();
     }
 
-    function switchAction(action, el) {
+    function switchAction(action) {
         currentAction = action;
-        $('.gate-action-tab').removeClass('active');
-        $(el).addClass('active');
+        $('.action-tab').removeClass('active');
+        $(event.target).addClass('active');
         updateSections();
     }
 
     function updateSections() {
-        $('.gate-section').removeClass('active');
+        $('.section').removeClass('active');
         $('#resultBox').hide();
         if(currentMode === 'owner' && currentAction === 'enter') $('#ownerEnter').addClass('active');
         else if(currentMode === 'owner' && currentAction === 'leave') $('#ownerLeave').addClass('active');

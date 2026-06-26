@@ -6,12 +6,28 @@
     <title>个人信息 - 智慧小区</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
+    <style>
+        body { display: flex; align-items: flex-start; justify-content: center; min-height: 100vh; margin: 0; padding: 40px 15px; }
+        .profile-card {
+            max-width: 500px; width: 100%; padding: 35px; background: #fff;
+            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .profile-icon { font-size: 42px; text-align: center; margin-bottom: 8px; }
+        .profile-title { text-align: center; font-weight: 700; color: #2c3e50; margin-bottom: 25px; font-size: 20px; }
+        .info-row { display: flex; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .info-label { width: 100px; font-weight: 600; color: #555; font-size: 14px; flex-shrink: 0; }
+        .info-value { flex: 1; color: #333; font-size: 14px; }
+        .back-link { text-align: center; margin-top: 20px; }
+        .back-link a { color: #333; text-decoration: none; font-size: 14px; margin: 0 10px; }
+    </style>
 </head>
-<body class="form-page-body">
+<body>
 
-<div class="form-card">
-    <div class="form-card-icon">👤</div>
-    <div class="form-card-title">我的个人信息</div>
+<div class="profile-card">
+    <div class="profile-icon">👤</div>
+    <div class="profile-title">我的个人信息</div>
 
     <div id="infoBody">
         <p class="text-center text-muted py-4">正在加载数据...</p>
@@ -39,7 +55,7 @@
                         <p style="font-size:48px;">🔒</p>
                         <p style="font-size:16px; font-weight:600; color:#333;">尚未核验身份</p>
                         <p class="text-muted" style="font-size:13px; margin-bottom:15px;">${data.msg || '请先进行身份核验后再查看个人信息'}</p>
-                        <a href="verify.html" class="btn btn-pill btn-pill-primary" style="width:auto; padding:10px 30px;">📝 去核验身份</a>
+                        <a href="verify.html" class="btn btn-primary" style="border-radius:50px; padding:10px 30px;">📝 去核验身份</a>
                     </div>`);
                 return;
             }

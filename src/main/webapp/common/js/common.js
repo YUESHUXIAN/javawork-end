@@ -5,10 +5,11 @@
  * 自动检测部署路径，支持根路径和子路径部署
  */
 function getContextPath() {
-    let path = window.location.pathname;
-    let segments = path.split('/').filter(function(s) { return s.length > 0; });
+    var path = window.location.pathname;
+    // 去掉开头的 /，然后取第一段
+    var segments = path.replace(/^\//, '').split('/');
     // 已知的子目录列表（不是 context path）
-    var knownDirs = ['admin', 'owner', 'gate', 'common', 'images', 'WEB-INF'];
+    var knownDirs = ['admin', 'owner', 'gate', 'common', 'images', 'WEB-INF', 'index.html', ''];
     if (segments.length > 1 && knownDirs.indexOf(segments[0]) === -1) {
         return '/' + segments[0];
     }
@@ -17,16 +18,19 @@ function getContextPath() {
 
 // 全局上下文路径
 var CTX = getContextPath();
+console.log('[common.js] 上下文路径: "' + CTX + '"');
+console.log('[common.js] 当前路径: "' + window.location.pathname + '"');
 
 // ---- Axios 拦截器：自动给所有请求 URL 加上 context path ----
 if (typeof axios !== 'undefined') {
     axios.interceptors.request.use(function(config) {
-        // 只处理以 / 开头的相对路径，且避免重复添加 context path
         if (config.url && config.url.startsWith('/') && !config.url.startsWith('//')) {
-            if (CTX && !config.url.startsWith(CTX + '/')) {
+            // 如果有 context path 且 URL 还没加上，就加上
+            if (CTX && config.url.indexOf(CTX + '/') !== 0) {
                 config.url = CTX + config.url;
             }
         }
+        console.log('[axios] 请求: ' + (config.method || '').toUpperCase() + ' ' + config.url);
         return config;
     }, function(error) {
         return Promise.reject(error);
@@ -43,34 +47,31 @@ function apiPost(url, params) {
     });
 }
 
-// 管理员页面登录检查（本地缓存 + 服务端验证）
+// 管理员页面登录检查（服务端验证）
 function checkAdminLogin() {
-    // 快速检查本地缓存（避免每次跳转都发 HTTP 请求）
-    var loginTime = sessionStorage.getItem('adminLoginTime');
-    if (loginTime) {
-        var elapsed = Date.now() - parseInt(loginTime);
-        // 30 分钟内认为有效，跳过 HTTP 检查
-        if (elapsed < 30 * 60 * 1000) return;
-    }
-    // 缓存过期或不存在，发请求验证
-    axios.get('/admin/checkLogin').then(function(res) {
-        if (res.data.code === 200) {
-            sessionStorage.setItem('adminLoginTime', Date.now().toString());
-        } else {
+    axios.get(CTX + '/admin/checkLogin').then(function(res) {
+        if (res.data.code !== 200) {
             sessionStorage.removeItem('adminLoginTime');
             alert('请先登录管理员');
-            window.location.href = CTX + '/admin/index.html';
+            window.location.href = CTX + '/index.html';
+        } else {
+            sessionStorage.setItem('adminLoginTime', Date.now().toString());
         }
-    }).catch(function() {});
+    }).catch(function() {
+        sessionStorage.removeItem('adminLoginTime');
+        window.location.href = CTX + '/index.html';
+    });
 }
 
-// 管理员退出登录
+// 管理员退出登录（调用服务端注销 + 清除本地缓存）
 function adminLogout() {
     sessionStorage.removeItem('adminLoginTime');
-    window.location.href = CTX + '/admin/logout';
+    axios.get(CTX + '/admin/logout').then(function() {
+        window.location.href = CTX + '/index.html';
+    }).catch(function() {
+        window.location.href = CTX + '/index.html';
+    });
 }
-
-console.log('[common.js] 上下文路径: "' + CTX + '"');
 
 // 统一的提示消息函数
 function showMessage(msg, isSuccess) {

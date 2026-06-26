@@ -10,29 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OwnerApplyDAO {
-    private Connection conn;
-    private PreparedStatement pstmt;
 
     /**
      * 新增业主信息修改申请
      */
     public int insertApply(Integer ownerId, String newPhone, String newRoom, String newPwd) {
-        int rows = 0;
         String sql = "INSERT INTO owner_apply(owner_id, new_phone, new_room, new_pwd, apply_time, status) VALUES (?,?,?,?,NOW(),0)";
-        conn = DBUtil.getConn();
-        try {
-            pstmt = conn.prepareStatement(sql);
+        try (Connection conn = DBUtil.getConn();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, ownerId);
             pstmt.setString(2, newPhone);
             pstmt.setString(3, newRoom);
             pstmt.setString(4, newPwd);
-            rows = pstmt.executeUpdate();
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            DBUtil.close(conn, pstmt);
+            return 0;
         }
-        return rows;
     }
 
     public java.util.List<OwnerApply> getAllApplies() {

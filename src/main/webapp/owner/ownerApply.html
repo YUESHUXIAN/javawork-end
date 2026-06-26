@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>业主信息修改申请</title>
+    <!-- 引入公共样式 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../common/css/common.css">
+</head>
+<body class="container mt-5">
+<h3>身份核验（姓名/身份证/楼栋必须与系统原始数据一致）</h3>
+<hr>
+<div class="row mb-3">
+    <label class="col-2">业主姓名：</label>
+    <div class="col-4">
+        <input type="text" id="name" class="form-control" placeholder="输入登记姓名">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-2">身份证号：</label>
+    <div class="col-4">
+        <input type="text" id="idCard" class="form-control" placeholder="输入身份证">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-2">所属楼栋ID：</label>
+    <div class="col-4">
+        <input type="number" id="buildId" class="form-control" placeholder="如1、2、3">
+    </div>
+</div>
+<hr>
+<h4>可修改信息（仅手机号、门牌号、门禁密码）</h4>
+<div class="row mb-3">
+    <label class="col-2">新手机号：</label>
+    <div class="col-4">
+        <input type="text" id="newPhone" class="form-control">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-2">新门牌号：</label>
+    <div class="col-4">
+        <input type="text" id="newRoom" class="form-control" placeholder="1-1-502">
+    </div>
+</div>
+<div class="row mb-3">
+    <label class="col-2">新门禁密码：</label>
+    <div class="col-4">
+        <input type="password" id="newPwd" class="form-control">
+    </div>
+</div>
+<button id="submitBtn" class="btn btn-primary">提交修改申请</button>
+<p id="msg" class="mt-3"></p>
+
+<!-- 引入jQuery、Axios公共js -->
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="../common/js/common.js"></script>
+<script>
+    $("#submitBtn").click(function(){
+        let params = {
+            name: $("#name").val(),
+            idCard: $("#idCard").val(),
+            buildId: $("#buildId").val(),
+            newPhone: $("#newPhone").val(),
+            newRoom: $("#newRoom").val(),
+            newPwd: $("#newPwd").val()
+        }
+        // 使用 URLSearchParams 转换为表单格式
+        const searchParams = new URLSearchParams();
+        Object.keys(params).forEach(key => {
+            searchParams.append(key, params[key]);
+        });
+
+        axios.post("/owner/submitApply", searchParams, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(res=>{
+            let data = res.data;
+            if(data.code === 200){
+                $("#msg").text(data.msg).css("color", "green");
+            }else{
+                $("#msg").text(data.msg).css("color", "red");
+            }
+        }).catch(() => {
+            $("#msg").text("网络错误，请稍后重试").css("color", "red");
+        })
+    })
+</script>
+</body>
+</html>

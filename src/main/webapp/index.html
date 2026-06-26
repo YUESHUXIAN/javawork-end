@@ -5,24 +5,475 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>智慧小区管理系统</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="common/css/common.css">
+    <link rel="stylesheet" href="common/css/origin-button.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .login-container { display: flex; width: 100%; min-height: 100vh; }
+
+        /* 左侧黑色区域 */
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-section::before {
+            content: '';
+            position: absolute;
+            top: 25%;
+            right: 25%;
+            width: 256px;
+            height: 256px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .left-section::after {
+            content: '';
+            position: absolute;
+            bottom: 25%;
+            left: 25%;
+            width: 384px;
+            height: 384px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+            z-index: 10;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* 角色容器 */
+        .characters-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            height: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .characters-container { position: relative; width: 550px; height: 400px; }
+
+        /* 角色基础样式 */
+        .character { position: absolute; bottom: 0; transform-origin: bottom center; }
+
+        /* 保持原有颜色 */
+        .character-purple {
+            left: 70px; width: 180px; height: 400px;
+            background-color: #6C3FF5;
+            border-radius: 10px 10px 0 0;
+            z-index: 1;
+        }
+
+        .character-black {
+            left: 240px; width: 120px; height: 310px;
+            background-color: #2D2D2D;
+            border-radius: 8px 8px 0 0;
+            z-index: 2;
+        }
+
+        .character-orange {
+            left: 0; width: 240px; height: 200px;
+            background-color: #FF9B6B;
+            border-radius: 120px 120px 0 0;
+            z-index: 3;
+        }
+
+        .character-yellow {
+            left: 310px; width: 140px; height: 230px;
+            background-color: #E8D754;
+            border-radius: 70px 70px 0 0;
+            z-index: 4;
+        }
+
+        /* 眼睛容器 */
+        .eyes { position: absolute; display: flex; }
+        .character-purple .eyes { left: 45px; top: 40px; gap: 32px; }
+        .character-black .eyes { left: 26px; top: 32px; gap: 24px; }
+        .character-orange .eyes { left: 82px; top: 90px; gap: 32px; }
+        .character-yellow .eyes { left: 52px; top: 40px; gap: 24px; }
+
+        /* 眼球 - 白色 */
+        .eye {
+            width: 18px; height: 18px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .character-black .eye { width: 16px; height: 16px; }
+
+        /* 瞳孔 - 黑色 */
+        .pupil { width: 7px; height: 7px; background: #2D2D2D; border-radius: 50%; }
+        .character-black .pupil { width: 6px; height: 6px; }
+        .character-orange .pupil,
+        .character-yellow .pupil { width: 12px; height: 12px; }
+
+        .mouth {
+            position: absolute;
+            left: 40px; top: 88px;
+            width: 80px; height: 4px;
+            background-color: #2D2D2D;
+            border-radius: 2px;
+        }
+
+        .grid-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 右侧白色区域 */
+        .right-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            background: #ffffff;
+        }
+
+        .login-form-wrapper { width: 100%; max-width: 420px; }
+
+        .login-header { text-align: center; margin-bottom: 40px; }
+        .login-header h1 { font-size: 30px; font-weight: 700; color: #111111; margin-bottom: 8px; }
+        .login-header p { color: #6b7280; font-size: 14px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; }
+
+        .form-control {
+            height: 48px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            padding: 0 16px;
+        }
+
+        .form-control:focus {
+            border-color: #111111;
+            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.1);
+            outline: none;
+        }
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .msg-error { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .msg-success { background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.15); color: #22c55e; }
+
+        .divider { height: 1px; background: #e5e7eb; margin: 28px 0; }
+        .service-buttons { display: flex; flex-direction: column; gap: 12px; }
+        .section-title { text-align: center; font-size: 13px; color: #9ca3af; margin-bottom: 16px; }
+
+        @media (max-width: 992px) {
+            .left-section { display: none; }
+            .right-section { flex: 1; }
+            .mobile-logo { display: flex !important; }
+        }
+
+        .mobile-logo {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 48px;
+        }
+
+        .mobile-logo .brand-icon { background: rgba(17, 17, 17, 0.08); }
+    </style>
 </head>
-<body class="landing-body">
+<body>
 
-<div class="landing-card">
-    <div class="landing-icon">🏘️</div>
-    <div class="landing-title">智慧小区管理系统</div>
-    <div class="landing-sub">Community Access Management System</div>
+<div class="login-container">
+    <!-- 左侧动画区域 - 黑色背景 -->
+    <div class="left-section">
+        <div class="grid-pattern"></div>
 
-    <a href="admin/index.html" class="btn-landing btn-landing-primary">🔐 &nbsp;管理员登录</a>
-    <a href="owner/index.html" class="btn-landing btn-landing-success">👤 &nbsp;业主服务中心</a>
+        <div class="brand-logo">
+            <div class="brand-icon">🏘️</div>
+            <span>智慧小区管理系统</span>
+        </div>
 
-    <div class="landing-divider"></div>
+        <div class="characters-wrapper">
+            <div class="characters-container" id="charactersContainer">
+                <!-- 紫色角色 -->
+                <div class="character character-purple" id="purple">
+                    <div class="eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                </div>
 
-    <a href="gate/device.html" class="btn-landing btn-landing-info">🚪 &nbsp;门禁设备终端</a>
+                <!-- 黑色角色 -->
+                <div class="character character-black" id="black">
+                    <div class="eyes">
+                        <div class="eye"><div class="pupil"></div></div>
+                        <div class="eye"><div class="pupil"></div></div>
+                    </div>
+                </div>
 
-    <div class="landing-footer">© 2026 智慧小区管理系统</div>
+                <!-- 橙色角色 -->
+                <div class="character character-orange" id="orange">
+                    <div class="eyes">
+                        <div class="pupil"></div>
+                        <div class="pupil"></div>
+                    </div>
+                </div>
+
+                <!-- 黄色角色 -->
+                <div class="character character-yellow" id="yellow">
+                    <div class="eyes">
+                        <div class="pupil"></div>
+                        <div class="pupil"></div>
+                    </div>
+                    <div class="mouth"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-text">© 2026 智慧小区管理系统</div>
+    </div>
+
+    <!-- 右侧登录表单 -->
+    <div class="right-section">
+        <div class="login-form-wrapper">
+            <div class="mobile-logo">
+                <div class="brand-icon">🏘️</div>
+                <span>智慧小区管理系统</span>
+            </div>
+
+            <div class="login-header">
+                <h1>欢迎使用</h1>
+                <p>智慧小区管理系统</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">管理员账号</label>
+                    <input type="text" id="username" class="form-control" placeholder="请输入账号" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">登录密码</label>
+                    <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ukeyCode">U盾编码 <small style="color:#9ca3af">（模拟硬件验证）</small></label>
+                    <input type="text" id="ukeyCode" class="form-control" placeholder="测试：UD2026001" required>
+                </div>
+
+                <div class="msg msg-error" id="errorMsg"></div>
+                <div class="msg msg-success" id="successMsg"></div>
+
+                <button type="submit" class="origin-btn origin-btn-gradient origin-btn-block origin-btn-lg" id="loginBtn">
+                    🔐 管理员登录
+                </button>
+            </form>
+
+            <div class="divider"></div>
+            <div class="section-title">其他服务入口</div>
+
+            <div class="service-buttons">
+                <a href="owner/index.html" class="origin-btn origin-btn-secondary origin-btn-block">
+                    👤 业主服务中心
+                </a>
+                <a href="gate/device.html" class="origin-btn origin-btn-primary origin-btn-block">
+                    🚪 门禁设备终端
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+<script src="common/js/common.js"></script>
+<script src="common/js/origin-button.js"></script>
+<script>
+(function() {
+    'use strict';
+
+    var purple = document.getElementById('purple');
+    var black = document.getElementById('black');
+    var orange = document.getElementById('orange');
+    var yellow = document.getElementById('yellow');
+
+    var purpleEyes = purple.querySelector('.eyes');
+    var blackEyes = black.querySelector('.eyes');
+    var orangeEyes = orange.querySelector('.eyes');
+    var yellowEyes = yellow.querySelector('.eyes');
+    var yellowMouth = yellow.querySelector('.mouth');
+
+    var purpleEyeballs = purple.querySelectorAll('.eye');
+    var blackEyeballs = black.querySelectorAll('.eye');
+
+    var mouseX = 0, mouseY = 0, rafId = null;
+
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!rafId) rafId = requestAnimationFrame(updateCharacters);
+    });
+
+    function getOffset(elem) {
+        var rect = elem.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 3;
+        var dx = mouseX - cx;
+        var dy = mouseY - cy;
+        return {
+            x: Math.max(-15, Math.min(15, dx / 20)),
+            y: Math.max(-10, Math.min(10, dy / 30)),
+            skew: Math.max(-6, Math.min(6, -dx / 120))
+        };
+    }
+
+    function updateCharacters() {
+        rafId = null;
+        var p = getOffset(purple);
+        var b = getOffset(black);
+        var o = getOffset(orange);
+        var y = getOffset(yellow);
+
+        purple.style.transform = 'skewX(' + p.skew + 'deg)';
+        purpleEyes.style.transform = 'translate(' + p.x + 'px, ' + p.y + 'px)';
+
+        black.style.transform = 'skewX(' + b.skew + 'deg)';
+        blackEyes.style.transform = 'translate(' + b.x + 'px, ' + b.y + 'px)';
+
+        orange.style.transform = 'skewX(' + o.skew + 'deg)';
+        orangeEyes.style.transform = 'translate(' + o.x + 'px, ' + o.y + 'px)';
+
+        yellow.style.transform = 'skewX(' + y.skew + 'deg)';
+        yellowEyes.style.transform = 'translate(' + y.x + 'px, ' + y.y + 'px)';
+        yellowMouth.style.transform = 'translate(' + y.x + 'px, ' + y.y + 'px)';
+    }
+
+    function blinkPurple() {
+        purpleEyeballs[0].style.height = '2px';
+        purpleEyeballs[1].style.height = '2px';
+        setTimeout(function() { purpleEyeballs[0].style.height = '18px'; purpleEyeballs[1].style.height = '18px'; }, 150);
+        setTimeout(blinkPurple, 3000 + Math.random() * 4000);
+    }
+
+    function blinkBlack() {
+        blackEyeballs[0].style.height = '2px';
+        blackEyeballs[1].style.height = '2px';
+        setTimeout(function() { blackEyeballs[0].style.height = '16px'; blackEyeballs[1].style.height = '16px'; }, 150);
+        setTimeout(blinkBlack, 3000 + Math.random() * 4000);
+    }
+
+    setTimeout(blinkPurple, 2000);
+    setTimeout(blinkBlack, 3000);
+    updateCharacters();
+
+    // 登录表单
+    var loginForm = document.getElementById('loginForm');
+    var loginBtn = document.getElementById('loginBtn');
+    var errorMsg = document.getElementById('errorMsg');
+    var successMsg = document.getElementById('successMsg');
+
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var username = document.getElementById('username').value.trim();
+        var password = document.getElementById('password').value.trim();
+        var ukeyCode = document.getElementById('ukeyCode').value.trim();
+
+        if (!username || !password || !ukeyCode) { showError('请填写完整登录信息'); return; }
+
+        loginBtn.disabled = true;
+        loginBtn.setAttribute('aria-busy', 'true');
+        loginBtn.innerHTML = '<span class="origin-btn-spinner"></span> 登录中...';
+        hideMessages();
+
+        var params = new URLSearchParams();
+        params.append('username', username);
+        params.append('password', password);
+        params.append('ukeyCode', ukeyCode);
+
+        axios.post(CTX + '/admin/login', params, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+            .then(function(res) {
+                var data = res.data;
+                if (data.code === 200) {
+                    sessionStorage.setItem('adminLoginTime', Date.now().toString());
+                    showSuccess('登录成功，正在跳转...');
+                    setTimeout(function() { window.location.href = CTX + '/admin/records.html'; }, 600);
+                } else {
+                    showError(data.msg || '登录失败');
+                }
+            })
+            .catch(function(err) {
+                showError('连接服务器失败: ' + (err.message || '请检查网络'));
+            })
+            .finally(function() {
+                loginBtn.disabled = false;
+                loginBtn.removeAttribute('aria-busy');
+                loginBtn.innerHTML = '🔐 管理员登录';
+            });
+    });
+
+    function showError(msg) { errorMsg.textContent = '❌ ' + msg; errorMsg.style.display = 'block'; successMsg.style.display = 'none'; }
+    function showSuccess(msg) { successMsg.textContent = '✅ ' + msg; successMsg.style.display = 'block'; errorMsg.style.display = 'none'; }
+    function hideMessages() { errorMsg.style.display = 'none'; successMsg.style.display = 'none'; }
+
+    document.addEventListener('keydown', function(e) { if (e.key === 'Enter') loginForm.dispatchEvent(new Event('submit')); });
+})();
+</script>
 
 </body>
 </html>
