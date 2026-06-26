@@ -13,13 +13,13 @@
         }
         .gate-card {
             max-width: 520px; width: 100%; background: #fff;
-            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             overflow: hidden; animation: fadeInUp 0.5s ease-out;
         }
         @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
         .gate-header {
-            background: #1a1a1a;
+            background: #1F354C;
             color: #fff; padding: 25px; text-align: center;
         }
         .gate-header h3 { margin: 0; font-weight: 700; font-size: 22px; }
@@ -35,10 +35,10 @@
         .mode-tab {
             flex: 1; padding: 12px; text-align: center; cursor: pointer;
             font-weight: 600; font-size: 14px; transition: all 0.3s;
-            background: #f0f0f0; color: #666; border: none;
+            background: #F4F7FA; color: #718096; border: none;
         }
         .mode-tab.active {
-            background: #1a1a1a; color: #fff;
+            background: #1F354C; color: #fff;
         }
 
         /* 动作切换 */
@@ -49,19 +49,19 @@
         .action-tab {
             flex: 1; padding: 10px; text-align: center; cursor: pointer;
             font-weight: 500; font-size: 13px; transition: all 0.3s;
-            background: #f8f8f8; color: #888; border: none;
+            background: #F4F7FA; color: #718096; border: none;
         }
-        .action-tab.active { background: #43e97b; color: #fff; }
-        .action-tab.leave.active { background: #f5576c; color: #fff; }
+        .action-tab.active { background: #38A169; color: #fff; }
+        .action-tab.leave.active { background: #E53E3E; color: #fff; }
 
-        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
+        .form-group label { font-weight: 500; color: #4A5568; font-size: 14px; }
         .btn-gate {
-            background: #43e97b; color: #fff; border: none;
+            background: #38A169; color: #fff; border: none;
             border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600; width: 100%;
         }
         .btn-gate:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; }
         .btn-leave {
-            background: #f5576c; color: #fff; border: none;
+            background: #E53E3E; color: #fff; border: none;
             border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600; width: 100%;
         }
         .btn-leave:hover { box-shadow: 0 6px 20px rgba(245,87,108,0.4); color: #fff; }
@@ -76,17 +76,17 @@
         .result-warn { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
 
         .temp-pwd-box {
-            background: #f0f0ff; border: 2px dashed #333; border-radius: 10px;
+            background: #f0f0ff; border: 2px dashed #265F99; border-radius: 10px;
             padding: 15px; text-align: center; margin-top: 15px; display: none;
         }
-        .temp-pwd-box .pwd-label { font-size: 13px; color: #888; margin-bottom: 5px; }
-        .temp-pwd-box .pwd-value { font-size: 28px; font-weight: 700; color: #333; letter-spacing: 3px; }
+        .temp-pwd-box .pwd-label { font-size: 13px; color: #718096; margin-bottom: 5px; }
+        .temp-pwd-box .pwd-value { font-size: 28px; font-weight: 700; color: #2D3748; letter-spacing: 3px; }
 
         .section { display: none; }
         .section.active { display: block; }
 
         .back-link { text-align: center; margin-top: 15px; }
-        .back-link a { color: #333; text-decoration: none; font-size: 13px; }
+        .back-link a { color: #2D3748; text-decoration: none; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -160,7 +160,7 @@
             </div>
 
             <div style="margin-top:15px;">
-                <button class="btn btn-gate" onclick="visitorEnter()" style="background: #4facfe;">🔓 使用临时密码开门</button>
+                <button class="btn btn-gate" onclick="visitorEnter()" style="background: #265F99;">🔓 使用临时密码开门</button>
             </div>
         </div>
 

@@ -1,0 +1,140 @@
+/**
+ * Origin Button - 源按钮样式
+ * 渐变胶囊按钮 + 鼠标进入点圆形填充动画
+ */
+
+/* 基础按钮 */
+.origin-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: #fff;
+    background: #111;
+}
+
+.origin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    text-decoration: none;
+}
+
+.origin-btn:active {
+    transform: translateY(0);
+}
+
+/* 填充层 */
+.origin-btn-fill {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+    transition: width 0.5s ease, height 0.5s ease, transform 0.5s ease;
+    z-index: 1;
+}
+
+.origin-btn:hover .origin-btn-fill {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* 内容层 */
+.origin-btn-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* 主题配色 */
+/* 主操作：藏青 */
+.origin-btn-gradient {
+    background: #265F99;
+}
+
+.origin-btn-gradient:hover {
+    background: #1f5082;
+    box-shadow: 0 8px 25px rgba(38, 95, 153, 0.3);
+}
+
+/* 功能入口：暖橙 */
+.origin-btn-primary {
+    background: #F28C38;
+}
+
+.origin-btn-primary:hover {
+    background: #e07c28;
+    box-shadow: 0 8px 25px rgba(242, 140, 56, 0.3);
+}
+
+/* 次要入口：浅灰 */
+.origin-btn-secondary {
+    background: #CBD5E0;
+    color: #2D3748;
+}
+
+.origin-btn-secondary:hover {
+    background: #B8C4D0;
+    color: #2D3748;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.origin-btn-success {
+    background: #38A169;
+}
+
+.origin-btn-danger {
+    background: #E53E3E;
+}
+
+/* 尺寸 */
+.origin-btn-lg {
+    padding: 14px 36px;
+    font-size: 16px;
+}
+
+.origin-btn-sm {
+    padding: 8px 18px;
+    font-size: 13px;
+}
+
+/* 全宽 */
+.origin-btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* 加载动画 */
+.origin-btn-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: origin-spin 0.6s linear infinite;
+}
+
+@keyframes origin-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 禁用状态 */
+.origin-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

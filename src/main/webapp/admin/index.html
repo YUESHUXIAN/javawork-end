@@ -10,19 +10,19 @@
         body { display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
         .login-card {
             max-width: 420px; width: 90%; padding: 40px; background: #fff;
-            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         .login-icon { font-size: 48px; text-align: center; margin-bottom: 10px; }
-        .login-title { text-align: center; font-weight: 700; color: #2c3e50; margin-bottom: 30px; font-size: 22px; }
-        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
+        .login-title { text-align: center; font-weight: 700; color: #2D3748; margin-bottom: 30px; font-size: 22px; }
+        .form-group label { font-weight: 500; color: #4A5568; font-size: 14px; }
         .btn-login {
-            background: #1a1a1a; color: #fff; border: none;
+            background: #265F99; color: #fff; border: none;
             border-radius: 50px; padding: 12px; font-size: 16px; font-weight: 600;
             width: 100%; margin-top: 10px; transition: all 0.3s;
         }
         .btn-login:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); color: #fff; }
         .back-link { text-align: center; margin-top: 20px; }
-        .back-link a { color: #333; text-decoration: none; font-size: 14px; }
+        .back-link a { color: #718096; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -59,7 +59,7 @@
         let password = $("#password").val().trim();
         let ukeyCode = $("#ukeyCode").val().trim();
         if(!username || !password || !ukeyCode) {
-            $("#loginMsg").text("请填写完整登录信息").css("color", "#f5576c");
+            $("#loginMsg").text("请填写完整登录信息").css("color", "#E53E3E");
             return;
         }
 
@@ -74,13 +74,13 @@
             let data = res.data;
             if(data.code === 200) {
                 sessionStorage.setItem('adminLoginTime', Date.now().toString());
-                $("#loginMsg").text("✅ 登录成功，正在跳转...").css("color", "#43e97b");
+                $("#loginMsg").text("✅ 登录成功，正在跳转...").css("color", "#38A169");
                 setTimeout(() => { location.href = "records.html"; }, 600);
             } else {
-                $("#loginMsg").text("❌ " + (data.msg || '登录失败')).css("color", "#f5576c");
+                $("#loginMsg").text("❌ " + (data.msg || '登录失败')).css("color", "#E53E3E");
             }
         }).catch(err => {
-            $("#loginMsg").text("❌ 连接服务器失败: " + (err.message || '')).css("color", "#f5576c");
+            $("#loginMsg").text("❌ 连接服务器失败: " + (err.message || '')).css("color", "#E53E3E");
             console.error("登录错误:", err);
         });
     });

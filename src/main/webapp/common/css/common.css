@@ -1,4 +1,5 @@
 /* common.css - 智慧小区管理系统通用样式 */
+/* 配色方案：浅藏青主题，柔和不刺眼 */
 
 /* 1. 全局基础设置 */
 * {
@@ -7,9 +8,9 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #f5f5f5;
+    background: #F9FAFC;
     min-height: 100vh;
-    color: #333;
+    color: #2D3748;
     margin: 0;
     padding: 0;
 }
@@ -19,7 +20,7 @@ body {
     background-color: #ffffff;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     margin-top: 30px;
     margin-bottom: 30px;
     max-width: 1200px;
@@ -40,13 +41,13 @@ body {
     justify-content: space-between;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid #E8EEF6;
 }
 
 .page-header h3 {
     margin: 0;
     font-weight: 700;
-    color: #2c3e50;
+    color: #2D3748;
     font-size: 22px;
 }
 
@@ -55,7 +56,7 @@ body {
     display: inline-block;
     width: 4px;
     height: 22px;
-    background: #333;
+    background: #265F99;
     border-radius: 2px;
     margin-right: 10px;
     vertical-align: middle;
@@ -65,15 +66,15 @@ body {
 .table {
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
 }
 
 .table thead th {
-    background: #1a1a1a;
-    color: #fff;
+    background: #E8EEF6;
+    color: #2D3748;
     border: none;
     padding: 12px 15px;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
 }
 
@@ -81,15 +82,17 @@ body {
     padding: 10px 15px;
     vertical-align: middle;
     font-size: 14px;
+    color: #2D3748;
+    border-bottom: 1px solid #F0F3F8;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #f5f5f5;
+    background-color: #F4F7FA;
 }
 
 /* 5. 按钮样式 + 动态效果 */
 .btn {
-    border-radius: 50px;
+    border-radius: 8px;
     padding: 8px 20px;
     font-size: 14px;
     font-weight: 500;
@@ -107,7 +110,7 @@ body {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.5s ease, height 0.5s ease;
@@ -120,85 +123,96 @@ body {
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 .btn:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
+/* 主操作：藏青 */
 .btn-primary {
-    background: #1a1a1a;
+    background: #265F99;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background: #333;
+    background: #1E5288;
     color: #fff;
 }
 
+/* 成功/通过 */
 .btn-success {
-    background: #43e97b;
+    background: #38A169;
     color: #fff;
 }
 
 .btn-success:hover {
-    background: #3ad46e;
+    background: #2F8A5B;
     color: #fff;
 }
 
+/* 导出/高亮：暖橙 */
 .btn-info {
-    background: #4facfe;
+    background: #F28C38;
     color: #fff;
 }
 
 .btn-info:hover {
-    background: #3d9aec;
+    background: #E07A26;
     color: #fff;
 }
 
+/* 警告 */
 .btn-warning {
-    background: #f6d365;
-    color: #333;
+    background: #ECC94B;
+    color: #2D3748;
 }
 
 .btn-warning:hover {
-    background: #e8c554;
-    color: #333;
+    background: #DAB83C;
+    color: #2D3748;
 }
 
+/* 危险/删除 */
 .btn-danger {
-    background: #f5576c;
+    background: #E53E3E;
     color: #fff;
 }
 
 .btn-danger:hover {
-    background: #e0465b;
+    background: #D02E2E;
     color: #fff;
 }
 
+/* 次要/重置：浅灰 */
 .btn-secondary {
-    background: #6c757d;
-    color: #fff;
+    background: #CBD5E0;
+    color: #2D3748;
 }
 
 .btn-secondary:hover {
-    background: #5a6268;
-    color: #fff;
+    background: #B8C4D0;
+    color: #2D3748;
 }
 
 /* 6. 输入框样式 */
 .form-control {
-    border-radius: 6px;
-    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    border: 1.5px solid #E2E8F0;
     padding: 10px 14px;
     transition: all 0.2s ease;
+    color: #2D3748;
 }
 
 .form-control:focus {
-    border-color: #333;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    border-color: #265F99;
+    box-shadow: 0 0 0 3px rgba(38, 95, 153, 0.1);
+}
+
+.form-control::placeholder {
+    color: #A0AEC0;
 }
 
 /* 7. Badge 样式 */
@@ -210,34 +224,34 @@ body {
 }
 
 .badge-success {
-    background: #22c55e;
-    color: #fff;
+    background: #C6F6D5;
+    color: #276749;
 }
 
 .badge-warning {
-    background: #f59e0b;
-    color: #111;
+    background: #FEFCBF;
+    color: #975A16;
 }
 
 .badge-info {
-    background: #64748b;
-    color: #fff;
+    background: #BEE3F8;
+    color: #2A4365;
 }
 
 .badge-danger {
-    background: #ef4444;
-    color: #fff;
+    background: #FED7D7;
+    color: #9B2C2C;
 }
 
 /* 8. Modal 样式 */
 .modal-content {
     border-radius: 12px;
     border: none;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 }
 
 .modal-header {
-    background: #1a1a1a;
+    background: #1F354C;
     color: #fff;
     border-radius: 12px 12px 0 0;
     padding: 18px 24px;
@@ -258,22 +272,22 @@ body {
 }
 
 .modal-footer {
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid #F0F3F8;
     padding: 16px 24px;
 }
 
 /* 9. 搜索区域 */
 .search-bar {
-    background: #fafafa;
+    background: #F4F7FA;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #E2E8F0;
 }
 
 .search-bar label {
     font-weight: 500;
-    color: #555;
+    color: #4A5568;
     margin-bottom: 5px;
     font-size: 14px;
 }
@@ -282,7 +296,7 @@ body {
 .empty-state {
     text-align: center;
     padding: 40px;
-    color: #999;
+    color: #718096;
 }
 
 .empty-state .icon {
@@ -295,12 +309,12 @@ body {
     margin-right: 5px;
     font-size: 0.85rem;
     padding: 5px 12px;
-    border-radius: 50px;
+    border-radius: 8px;
 }
 
-/* 12. 管理后台导航栏 - 黑色主题 */
+/* 12. 管理后台导航栏 - 深灰蓝 */
 .admin-navbar {
-    background: #1a1a1a !important;
+    background: #1F354C !important;
     padding: 12px 0;
 }
 
@@ -310,7 +324,7 @@ body {
 }
 
 .admin-navbar .nav-link {
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
     transition: color 0.3s ease;
 }
 
@@ -330,14 +344,14 @@ body {
     padding: 40px;
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .login-card h3 {
     text-align: center;
     margin-bottom: 30px;
     font-weight: 700;
-    color: #2c3e50;
+    color: #2D3748;
 }
 
 .login-card h3::before {
@@ -356,6 +370,7 @@ body {
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .btn-pill::after {
@@ -365,7 +380,7 @@ body {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.5s ease, height 0.5s ease;
@@ -378,7 +393,7 @@ body {
 
 .btn-pill:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     color: #fff;
 }
 
@@ -386,10 +401,10 @@ body {
     transform: translateY(0);
 }
 
-.btn-pill-primary { background: #1a1a1a; }
-.btn-pill-success { background: #43e97b; }
-.btn-pill-info { background: #4facfe; }
-.btn-pill-danger { background: #f5576c; }
+.btn-pill-primary { background: #265F99; }
+.btn-pill-success { background: #38A169; }
+.btn-pill-info { background: #F28C38; }
+.btn-pill-danger { background: #E53E3E; }
 
 /* 15. 返回链接 */
 .back-link {
@@ -398,20 +413,20 @@ body {
 }
 
 .back-link a {
-    color: #333;
+    color: #718096;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
 }
 
 .back-link a:hover {
-    color: #000;
+    color: #265F99;
     text-decoration: underline;
 }
 
 /* 16. 步骤标签 */
 .step-label {
-    background: #1a1a1a;
+    background: #265F99;
     color: #fff;
     padding: 6px 14px;
     border-radius: 20px;
@@ -421,30 +436,30 @@ body {
     margin-bottom: 15px;
 }
 
-/* 17. 信息展示行（个人信息页） */
+/* 17. 信息展示行 */
 .info-row {
     display: flex;
     padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #F0F3F8;
 }
 
 .info-label {
     width: 100px;
     font-weight: 600;
-    color: #555;
+    color: #4A5568;
     font-size: 14px;
     flex-shrink: 0;
 }
 
 .info-value {
     flex: 1;
-    color: #333;
+    color: #2D3748;
     font-size: 14px;
 }
 
 /* 18. 门禁终端组件 */
 .gate-header {
-    background: #1a1a1a;
+    background: #1F354C;
     color: #fff;
     padding: 25px;
     text-align: center;
@@ -458,7 +473,7 @@ body {
 
 .gate-header p {
     margin: 5px 0 0;
-    opacity: 0.8;
+    opacity: 0.7;
     font-size: 13px;
 }
 
@@ -469,17 +484,16 @@ body {
     width: 100%;
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     animation: fadeInUp 0.5s ease-out;
 }
 
-/* 模式切换 */
 .gate-mode-tabs {
     display: flex;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     margin-bottom: 20px;
 }
 
@@ -491,22 +505,21 @@ body {
     font-weight: 600;
     font-size: 14px;
     transition: all 0.3s;
-    background: #f0f0f0;
-    color: #666;
+    background: #F4F7FA;
+    color: #718096;
     border: none;
 }
 
 .gate-mode-tab.active {
-    background: #1a1a1a;
+    background: #1F354C;
     color: #fff;
 }
 
-/* 动作切换 */
 .gate-action-tabs {
     display: flex;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     margin-bottom: 20px;
 }
 
@@ -518,22 +531,21 @@ body {
     font-weight: 500;
     font-size: 13px;
     transition: all 0.3s;
-    background: #f8f8f8;
-    color: #888;
+    background: #F4F7FA;
+    color: #718096;
     border: none;
 }
 
 .gate-action-tab.active {
-    background: #43e97b;
+    background: #38A169;
     color: #fff;
 }
 
 .gate-action-tab.leave.active {
-    background: #f5576c;
+    background: #E53E3E;
     color: #fff;
 }
 
-/* 结果提示框 */
 .result-box {
     margin-top: 20px;
     padding: 15px;
@@ -544,14 +556,13 @@ body {
     display: none;
 }
 
-.result-success { background: #e8f8f0; color: #27ae60; border: 1px solid #a3e4c1; }
-.result-error { background: #fde8e8; color: #e74c3c; border: 1px solid #f5a3a3; }
-.result-warn { background: #fff8e1; color: #f57f17; border: 1px solid #ffe082; }
+.result-success { background: #C6F6D5; color: #276749; border: 1px solid #9AE6B4; }
+.result-error { background: #FED7D7; color: #9B2C2C; border: 1px solid #FEB2B2; }
+.result-warn { background: #FEFCBF; color: #975A16; border: 1px solid #FAF089; }
 
-/* 临时密码展示框 */
 .temp-pwd-box {
-    background: #f5f5f5;
-    border: 2px dashed #333;
+    background: #F4F7FA;
+    border: 2px dashed #265F99;
     border-radius: 10px;
     padding: 15px;
     text-align: center;
@@ -559,10 +570,9 @@ body {
     display: none;
 }
 
-.temp-pwd-label { font-size: 13px; color: #888; margin-bottom: 5px; }
-.temp-pwd-value { font-size: 28px; font-weight: 700; color: #333; letter-spacing: 3px; }
+.temp-pwd-label { font-size: 13px; color: #718096; margin-bottom: 5px; }
+.temp-pwd-value { font-size: 28px; font-weight: 700; color: #265F99; letter-spacing: 3px; }
 
-/* 门禁页面内区块切换 */
 .gate-section { display: none; }
 .gate-section.active { display: block; }
 
@@ -573,14 +583,14 @@ body {
     justify-content: center;
     min-height: 100vh;
     margin: 0;
-    background: #f5f5f5;
+    background: #F9FAFC;
 }
 
 .landing-card {
     background: #fff;
     padding: 50px 40px;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     text-align: center;
     max-width: 460px;
     width: 90%;
@@ -588,10 +598,10 @@ body {
 }
 
 .landing-icon { font-size: 56px; margin-bottom: 15px; }
-.landing-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
-.landing-sub { color: #8e99a4; margin-bottom: 35px; font-size: 14px; }
-.landing-divider { height: 1px; background: #e8e8e8; margin: 25px 0; }
-.landing-footer { color: #aaa; font-size: 12px; margin-top: 20px; }
+.landing-title { font-size: 28px; font-weight: 700; color: #2D3748; margin-bottom: 8px; }
+.landing-sub { color: #718096; margin-bottom: 35px; font-size: 14px; }
+.landing-divider { height: 1px; background: #E2E8F0; margin: 25px 0; }
+.landing-footer { color: #A0AEC0; font-size: 12px; margin-top: 20px; }
 
 .landing-card .btn-landing {
     width: 85%;
@@ -616,7 +626,7 @@ body {
     left: 50%;
     width: 0;
     height: 0;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
     transition: width 0.5s ease, height 0.5s ease;
@@ -629,14 +639,14 @@ body {
 
 .landing-card .btn-landing:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     color: #fff;
     text-decoration: none;
 }
 
-.btn-landing-primary { background: #1a1a1a; }
-.btn-landing-success { background: #43e97b; }
-.btn-landing-info { background: #4facfe; }
+.btn-landing-primary { background: #265F99; }
+.btn-landing-success { background: #38A169; }
+.btn-landing-info { background: #F28C38; }
 
 /* 20. 响应式 */
 @media (max-width: 768px) {

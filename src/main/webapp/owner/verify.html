@@ -10,18 +10,18 @@
         body { display: flex; align-items: flex-start; justify-content: center; min-height: 100vh; margin: 0; padding: 40px 15px; }
         .verify-card {
             max-width: 500px; width: 100%; padding: 35px; background: #fff;
-            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+            border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             animation: fadeInUp 0.5s ease-out;
         }
         @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
         .verify-icon { font-size: 42px; text-align: center; margin-bottom: 8px; }
-        .verify-title { text-align: center; font-weight: 700; color: #2c3e50; margin-bottom: 25px; font-size: 20px; }
+        .verify-title { text-align: center; font-weight: 700; color: #2D3748; margin-bottom: 25px; font-size: 20px; }
         .step-label {
-            background: #1a1a1a; color: #fff;
+            background: #265F99; color: #fff;
             padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
             display: inline-block; margin-bottom: 15px;
         }
-        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
+        .form-group label { font-weight: 500; color: #4A5568; font-size: 14px; }
         .btn-verify, .btn-submit, .btn-profile {
             border: none; border-radius: 50px; padding: 12px;
             font-size: 15px; font-weight: 600; width: 100%;
@@ -37,11 +37,11 @@
         .btn-verify:hover::after, .btn-submit:hover::after, .btn-profile:hover::after {
             width: 400px; height: 400px;
         }
-        .btn-verify { background: #1a1a1a; color: #fff; }
+        .btn-verify { background: #265F99; color: #fff; }
         .btn-verify:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.3); color: #fff; transform: translateY(-2px); }
-        .btn-submit { background: #43e97b; color: #fff; }
+        .btn-submit { background: #38A169; color: #fff; }
         .btn-submit:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; transform: translateY(-2px); }
-        .btn-profile { background: #4facfe; color: #fff; }
+        .btn-profile { background: #265F99; color: #fff; }
         .btn-profile:hover { box-shadow: 0 6px 20px rgba(79,172,254,0.4); color: #fff; transform: translateY(-2px); }
         .btn-verify:active, .btn-submit:active, .btn-profile:active { transform: translateY(0); }
         .apply-section { display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e0e0e0; }
@@ -151,7 +151,7 @@
         let buildId = $("#buildId").val();
 
         if(!name || !idCard || !buildId) {
-            $("#verifyMsg").text("请填写完整信息！").css("color", "#f5576c");
+            $("#verifyMsg").text("请填写完整信息！").css("color", "#E53E3E");
             return;
         }
 
@@ -165,14 +165,14 @@
         }).then(res => {
             let data = res.data;
             if(data.code === 200) {
-                $("#verifyMsg").text("✅ 身份核验成功！").css("color", "#43e97b");
+                $("#verifyMsg").text("✅ 身份核验成功！").css("color", "#38A169");
                 $("#applyArea").slideDown(300);
             } else {
-                $("#verifyMsg").text("❌ " + data.msg).css("color", "#f5576c");
+                $("#verifyMsg").text("❌ " + data.msg).css("color", "#E53E3E");
                 $("#applyArea").slideUp(300);
             }
         }).catch(() => {
-            $("#verifyMsg").text("❌ 网络错误").css("color", "#f5576c");
+            $("#verifyMsg").text("❌ 网络错误").css("color", "#E53E3E");
         });
     });
 
@@ -183,7 +183,7 @@
         let newPwd = $("#newPwd").val().trim();
 
         if(!newPhone || !newRoom || !newPwd) {
-            $("#applyMsg").text("请填写完整的修改信息！").css("color", "#f5576c");
+            $("#applyMsg").text("请填写完整的修改信息！").css("color", "#E53E3E");
             return;
         }
 
@@ -197,13 +197,13 @@
         }).then(res => {
             let data = res.data;
             if(data.code === 200) {
-                $("#applyMsg").text("✅ " + data.msg).css("color", "#43e97b");
+                $("#applyMsg").text("✅ " + data.msg).css("color", "#38A169");
                 $("#newPhone, #newRoom, #newPwd").val('');
             } else {
-                $("#applyMsg").text("❌ " + data.msg).css("color", "#f5576c");
+                $("#applyMsg").text("❌ " + data.msg).css("color", "#E53E3E");
             }
         }).catch(() => {
-            $("#applyMsg").text("❌ 网络错误，请稍后重试").css("color", "#f5576c");
+            $("#applyMsg").text("❌ 网络错误，请稍后重试").css("color", "#E53E3E");
         });
     });
 </script>
