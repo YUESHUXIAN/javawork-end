@@ -5,70 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>智慧小区管理系统</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-        }
-
-        .entry-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 50px 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-width: 460px;
-            width: 90%;
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo-icon { font-size: 56px; margin-bottom: 15px; }
-        .entry-title { font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
-        .entry-sub { color: #8e99a4; margin-bottom: 35px; font-size: 14px; }
-
-        .entry-card .btn {
-            width: 85%; padding: 14px; font-size: 16px; font-weight: 600;
-            margin: 10px auto; border-radius: 50px; display: block;
-            transition: all 0.3s ease; border: none;
-        }
-        .entry-card .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-
-        .btn-admin { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
-        .btn-owner { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; }
-        .btn-gate  { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; }
-
-        .divider { height: 1px; background: #e8e8e8; margin: 25px 0; }
-        .footer-text { color: #aaa; font-size: 12px; margin-top: 20px; }
-    </style>
+    <link rel="stylesheet" href="common/css/common.css">
 </head>
-<body>
+<body class="landing-body">
 
-<div class="entry-card">
-    <div class="logo-icon">🏘️</div>
-    <div class="entry-title">智慧小区管理系统</div>
-    <div class="entry-sub">Community Access Management System</div>
+<div class="landing-card">
+    <div class="landing-icon">🏘️</div>
+    <div class="landing-title">智慧小区管理系统</div>
+    <div class="landing-sub">Community Access Management System</div>
 
-    <a href="admin/index.html" class="btn btn-admin">🔐 &nbsp;管理员登录</a>
-    <a href="owner/index.html" class="btn btn-owner">👤 &nbsp;业主服务中心</a>
+    <a href="admin/index.html" class="btn-landing btn-landing-primary">🔐 &nbsp;管理员登录</a>
+    <a href="owner/index.html" class="btn-landing btn-landing-success">👤 &nbsp;业主服务中心</a>
 
-    <div class="divider"></div>
+    <div class="landing-divider"></div>
 
-    <a href="gate/device.html" class="btn btn-gate">🚪 &nbsp;门禁设备终端</a>
+    <a href="gate/device.html" class="btn-landing btn-landing-info">🚪 &nbsp;门禁设备终端</a>
 
-    <div class="footer-text">© 2026 智慧小区管理系统</div>
+    <div class="landing-footer">© 2026 智慧小区管理系统</div>
 </div>
 
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

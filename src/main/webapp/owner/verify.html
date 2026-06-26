@@ -7,46 +7,14 @@
     <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../common/css/common.css">
     <style>
-        body { display: flex; align-items: flex-start; justify-content: center; min-height: 100vh; margin: 0; padding: 40px 15px; }
-        .verify-card {
-            max-width: 500px; width: 100%; padding: 35px; background: #fff;
-            border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-            animation: fadeInUp 0.5s ease-out;
-        }
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .verify-icon { font-size: 42px; text-align: center; margin-bottom: 8px; }
-        .verify-title { text-align: center; font-weight: 700; color: #2c3e50; margin-bottom: 25px; font-size: 20px; }
-        .step-label {
-            background: linear-gradient(135deg, #667eea, #764ba2); color: #fff;
-            padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
-            display: inline-block; margin-bottom: 15px;
-        }
-        .form-group label { font-weight: 500; color: #555; font-size: 14px; }
-        .btn-verify {
-            background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; border: none;
-            border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
-        }
-        .btn-verify:hover { box-shadow: 0 6px 20px rgba(102,126,234,0.4); color: #fff; }
-        .btn-submit {
-            background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; border: none;
-            border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
-        }
-        .btn-submit:hover { box-shadow: 0 6px 20px rgba(67,233,123,0.4); color: #fff; }
-        .btn-profile {
-            background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; border: none;
-            border-radius: 50px; padding: 12px; font-size: 15px; font-weight: 600; width: 100%;
-        }
-        .btn-profile:hover { box-shadow: 0 6px 20px rgba(79,172,254,0.4); color: #fff; }
         .apply-section { display: none; margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e0e0e0; }
-        .back-link { text-align: center; margin-top: 15px; }
-        .back-link a { color: #667eea; text-decoration: none; font-size: 14px; }
     </style>
 </head>
-<body>
+<body class="form-page-body">
 
-<div class="verify-card">
-    <div class="verify-icon">📝</div>
-    <div class="verify-title">业主身份核验</div>
+<div class="form-card">
+    <div class="form-card-icon">📝</div>
+    <div class="form-card-title">业主身份核验</div>
 
     <!-- 第一步：身份核验 -->
     <div class="step-label">第一步：身份核验</div>
@@ -67,7 +35,7 @@
         </select>
     </div>
 
-    <button id="verifyBtn" class="btn btn-verify">🔍 核验身份</button>
+    <button id="verifyBtn" class="btn btn-pill btn-pill-primary">🔍 核验身份</button>
     <p id="verifyMsg" class="mt-2 text-center" style="min-height:20px;"></p>
 
     <!-- 第二步：核验成功后显示两个选项 -->
@@ -75,8 +43,8 @@
         <div class="step-label">第二步：选择操作</div>
         <p style="font-size:13px; color:#888; margin-bottom:15px;">✅ 身份核验通过！请选择您要进行的操作</p>
 
-        <a href="profile.html" class="menu-btn btn-profile" style="display:block; text-align:center; margin-bottom:12px;">📋 &nbsp;查看个人信息</a>
-        <button class="menu-btn btn-submit" style="display:block; text-align:center; width:100%;" onclick="showApplyForm()">📝 &nbsp;修改个人信息</button>
+        <a href="profile.html" class="btn btn-pill btn-pill-info" style="display:block; text-align:center; margin-bottom:12px;">📋 &nbsp;查看个人信息</a>
+        <button class="btn btn-pill btn-pill-success" style="display:block; text-align:center;" onclick="showApplyForm()">📝 &nbsp;修改个人信息</button>
     </div>
 
     <!-- 修改申请表单（点击修改个人信息后显示） -->
@@ -97,7 +65,7 @@
             <input type="password" id="newPwd" class="form-control" placeholder="请设置新的门禁密码">
         </div>
 
-        <button id="submitApplyBtn" class="btn btn-submit">📤 提交修改申请</button>
+        <button id="submitApplyBtn" class="btn btn-pill btn-pill-success">📤 提交修改申请</button>
         <p id="applyMsg" class="mt-2 text-center" style="min-height:20px;"></p>
         <button class="btn btn-secondary btn-block mt-2" onclick="hideApplyForm()">← 返回选择</button>
     </div>
