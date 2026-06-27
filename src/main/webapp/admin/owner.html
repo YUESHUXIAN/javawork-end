@@ -139,9 +139,9 @@
                     <td>${item.roomNo || '<span class="text-muted">-</span>'}</td>
                     <td>${item.phone || '<span class="text-muted">-</span>'}</td>
                     <td>${statusHtml}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning action-btn" onclick="openEditModal(${item.id}, '${item.name}', '${item.idCard}', ${item.buildId})">✏️ 修改</button>
-                        <button class="btn btn-sm btn-danger action-btn" onclick="deleteOwner(${item.id})">🗑️ 删除</button>
+                    <td style="white-space:nowrap;">
+                        <button class="btn-icon btn-icon-warning" title="修改" onclick="openEditModal(${item.id}, '${item.name}', '${item.idCard}', ${item.buildId})">✏️</button>
+                        <button class="btn-icon btn-icon-danger" title="删除" onclick="deleteOwner(${item.id})">🗑️</button>
                     </td>
                 </tr>`;
             });

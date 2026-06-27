@@ -76,10 +76,28 @@ public class OwnerDAO {
         DBUtil.update(sql, newPhone, newRoom, newPwd, ownerId);
     }
 
+    // 管理员审批时只更新非空字段
+    public void updateOwnerInfoSelective(Integer ownerId, String newPhone, String newRoom, String newPwd) {
+        StringBuilder sql = new StringBuilder("UPDATE owner SET is_confirm=1");
+        java.util.List<Object> params = new java.util.ArrayList<>();
+        if (newPhone != null) { sql.append(", phone=?"); params.add(newPhone); }
+        if (newRoom != null) { sql.append(", room_no=?"); params.add(newRoom); }
+        if (newPwd != null) { sql.append(", entry_pwd=?"); params.add(newPwd); }
+        sql.append(" WHERE id=?");
+        params.add(ownerId);
+        DBUtil.update(sql.toString(), params.toArray());
+    }
+
     // 管理员修改业主基本信息（姓名、身份证、楼宇）
     public void updateOwner(Integer id, String name, String idCard, Integer buildId) {
         String sql = "UPDATE owner SET name=?, id_card=?, build_id=? WHERE id=?";
         DBUtil.update(sql, name, idCard, buildId, id);
+    }
+
+    // 更新业主确认状态
+    public void updateOwnerConfirm(Integer ownerId, int confirm) {
+        String sql = "UPDATE owner SET is_confirm=? WHERE id=?";
+        DBUtil.update(sql, confirm, ownerId);
     }
 
     // 4. 管理员删除业主

@@ -89,18 +89,18 @@
     <!-- 修改申请表单（点击修改个人信息后显示） -->
     <div class="apply-section" id="applyFormArea" style="display:none;">
         <div class="step-label">提交修改申请</div>
-        <p style="font-size:13px; color:#888; margin-bottom:15px;">请填写需要修改的信息</p>
+        <p style="font-size:13px; color:#718096; margin-bottom:15px;">请填写需要修改的信息（至少填写一项）</p>
 
         <div class="form-group">
-            <label>新手机号</label>
+            <label>新手机号 <small style="color:#A0AEC0;">选填</small></label>
             <input type="text" id="newPhone" class="form-control" placeholder="请输入新手机号">
         </div>
         <div class="form-group">
-            <label>新房间号</label>
+            <label>新房间号 <small style="color:#A0AEC0;">选填</small></label>
             <input type="text" id="newRoom" class="form-control" placeholder="如：1-101">
         </div>
         <div class="form-group">
-            <label>新门禁密码</label>
+            <label>新门禁密码 <small style="color:#A0AEC0;">选填</small></label>
             <input type="password" id="newPwd" class="form-control" placeholder="请设置新的门禁密码">
         </div>
 
@@ -182,8 +182,8 @@
         let newRoom = $("#newRoom").val().trim();
         let newPwd = $("#newPwd").val().trim();
 
-        if(!newPhone || !newRoom || !newPwd) {
-            $("#applyMsg").text("请填写完整的修改信息！").css("color", "#E53E3E");
+        if(!newPhone && !newRoom && !newPwd) {
+            $("#applyMsg").text("请至少填写一项需要修改的信息！").css("color", "#E53E3E");
             return;
         }
 

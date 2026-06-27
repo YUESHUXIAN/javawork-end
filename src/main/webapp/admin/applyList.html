@@ -89,8 +89,8 @@
                 if(item.status == 0) {
                     statusHtml = '<span class="badge badge-warning">待审核</span>';
                     actionHtml = `
-                        <button class="btn btn-sm btn-success action-btn" onclick="approveApply(${item.id})">✅ 通过</button>
-                        <button class="btn btn-sm btn-danger action-btn" onclick="rejectApply(${item.id})">❌ 拒绝</button>`;
+                        <button class="btn btn-sm btn-success action-btn" onclick="approveApply(${item.id})">通过</button>
+                        <button class="btn btn-sm btn-danger action-btn" onclick="rejectApply(${item.id})">拒绝</button>`;
                 } else if(item.status == 1) {
                     statusHtml = '<span class="badge badge-success">已通过</span>';
                     actionHtml = '<span class="text-muted">已处理</span>';

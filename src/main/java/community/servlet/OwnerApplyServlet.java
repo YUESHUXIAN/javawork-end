@@ -29,11 +29,13 @@ public class OwnerApplyServlet extends HttpServlet {
             String newRoom = request.getParameter("newRoom");
             String newPwd = request.getParameter("newPwd");
 
-            if (newPhone == null || newPhone.trim().isEmpty() ||
-                newRoom == null || newRoom.trim().isEmpty() ||
-                newPwd == null || newPwd.trim().isEmpty()) {
+            // 至少填写一项
+            boolean hasPhone = newPhone != null && !newPhone.trim().isEmpty();
+            boolean hasRoom = newRoom != null && !newRoom.trim().isEmpty();
+            boolean hasPwd = newPwd != null && !newPwd.trim().isEmpty();
+            if (!hasPhone && !hasRoom && !hasPwd) {
                 json.put("code", 500);
-                json.put("msg", "请填写完整的修改信息");
+                json.put("msg", "请至少填写一项需要修改的信息");
                 out.write(json.toString());
                 return;
             }

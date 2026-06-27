@@ -97,9 +97,9 @@
                     <td>${item.id}</td>
                     <td><strong>${item.buildName}</strong></td>
                     <td><code>${item.buildNo}</code></td>
-                    <td>
-                        <button class="btn btn-sm btn-warning action-btn" onclick="openEditModal(${item.id}, '${item.buildName}', '${item.buildNo}')">✏️ 修改</button>
-                        <button class="btn btn-sm btn-danger action-btn" onclick="deleteBuilding(${item.id})">🗑️ 删除</button>
+                    <td style="white-space:nowrap;">
+                        <button class="btn-icon btn-icon-warning" title="修改" onclick="openEditModal(${item.id}, '${item.buildName}', '${item.buildNo}')">✏️</button>
+                        <button class="btn-icon btn-icon-danger" title="删除" onclick="deleteBuilding(${item.id})">🗑️</button>
                     </td>
                 </tr>`;
             });

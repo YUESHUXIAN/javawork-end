@@ -80,19 +80,26 @@ public class OwnerServlet extends HttpServlet {
             ownerDAO.deleteOwner(id);
             resp.getWriter().write("{\"code\":200,\"msg\":\"删除成功\"}");
         } else if ("approveApply".equals(action)) {
-            // 管理员审批修改申请
+            // 管理员审批修改申请（只更新非空字段）
             int applyId = Integer.parseInt(req.getParameter("applyId"));
             OwnerApply apply = applyDAO.getApplyById(applyId);
             if (apply != null) {
-                ownerDAO.updateOwnerInfo(apply.getOwnerId(), apply.getNewPhone(), apply.getNewRoom(), apply.getNewPwd());
+                String phone = (apply.getNewPhone() != null && !apply.getNewPhone().trim().isEmpty()) ? apply.getNewPhone().trim() : null;
+                String room = (apply.getNewRoom() != null && !apply.getNewRoom().trim().isEmpty()) ? apply.getNewRoom().trim() : null;
+                String pwd = (apply.getNewPwd() != null && !apply.getNewPwd().trim().isEmpty()) ? apply.getNewPwd().trim() : null;
+                ownerDAO.updateOwnerInfoSelective(apply.getOwnerId(), phone, room, pwd);
                 applyDAO.updateStatus(applyId, 1); // 标记为已审批
                 resp.getWriter().write("{\"code\":200,\"msg\":\"审核通过，业主信息已更新\"}");
             } else {
                 resp.getWriter().write("{\"code\":500,\"msg\":\"申请不存在\"}");
             }
         } else if ("rejectApply".equals(action)) {
-            // 管理员拒绝修改申请
+            // 管理员拒绝修改申请，同时确认业主原始信息
             int applyId = Integer.parseInt(req.getParameter("applyId"));
+            OwnerApply apply = applyDAO.getApplyById(applyId);
+            if (apply != null) {
+                ownerDAO.updateOwnerConfirm(apply.getOwnerId(), 1);
+            }
             applyDAO.updateStatus(applyId, 2); // 2=已拒绝
             resp.getWriter().write("{\"code\":200,\"msg\":\"已拒绝该申请\"}");
         }
