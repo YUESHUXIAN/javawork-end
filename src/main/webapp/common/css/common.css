@@ -312,6 +312,39 @@ body {
     border-radius: 8px;
 }
 
+/* 图标按钮（无文字） */
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    vertical-align: middle;
+}
+
+.btn-icon:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.btn-icon:active {
+    transform: translateY(0);
+}
+
+.btn-icon-warning { background: #ECC94B; }
+.btn-icon-danger { background: #E53E3E; color: #fff; }
+.btn-icon-success { background: #38A169; color: #fff; }
+
+.btn-icon + .btn-icon {
+    margin-left: 6px;
+}
+
 /* 12. 管理后台导航栏 - 深灰蓝 */
 .admin-navbar {
     background: #1F354C !important;
